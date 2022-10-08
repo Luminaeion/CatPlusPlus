@@ -2,8 +2,19 @@
 #include <conio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string>
+#include <fstream>
+#include <bits/stdc++.h>
 
 using namespace std;
+
+// function to make player inputs lowercase to match what the program expects
+string playerChoice() {
+    string playerInput;
+    cin >> playerInput;
+    transform(playerInput.begin(), playerInput.end(), playerInput.begin(), ::tolower);
+    return playerInput;
+}
 
 int main()
 {
@@ -15,6 +26,11 @@ int main()
     cout << "What is your name?" << endl;
     cin.getline(name, 50);
     cout << "Welcome, " << name << "." << endl;
+
+    // Test function to make player inputs lowercase
+    cout << "What colour is your fur?" << endl;
+    string colour = playerChoice();
+    cout << "You are a " << colour << " cat called " << name << "." << endl;
 
     // Player interaction test
     string tutorialChoice;
@@ -63,10 +79,10 @@ int main()
                 cout << "You find a <food item> that looks particularly delicious. Pick it up?" << endl;
                 cout << "Yes or no" << endl;
                 cin >> playerAction;
-                if(playerAction == "Yes"){
+                if(playerAction == "yes"){
                     cout << "You pick it up." << endl;
                     cout << "Obtained <food item>!" << endl;
-                } else {
+                } else if(playerAction == "no") {
                     cout << "You don't like this particular <food item>. You decide to leave it where it is." << endl;
                 }
             }
@@ -78,10 +94,10 @@ int main()
                 cout << "You find an <item>. It might be useful. Pick it up?" << endl;
                 cout << "Yes or no" << endl;
                 cin >> playerAction;
-                if(playerAction == "Yes"){
+                if(playerAction == "yes"){
                     cout << "You pick the <item> up." << endl;
                     cout << "Obtained <item>!" << endl;
-                } else if(playerAction == "No"){
+                } else if(playerAction == "no"){
                     cout << "You ignore the <item> and walk away." << endl;
                 }
             }
@@ -108,9 +124,11 @@ int main()
                 cout << "You find an <item>. It might be useful. Pick it up?" << endl;
                 cout << "Yes or no" << endl;
                 cin >> playerAction;
-                if(playerAction == "Yes"){
+                if(playerAction == "yes"){
                     cout << "You pick the <item> up." << endl;
                     cout << "Obtained <item>!" << endl;
+                } else if(playerAction == "no"){
+                    cout << "You decide to leave the <item> where it is." << endl;
                 }
             }
             break;
@@ -121,9 +139,11 @@ int main()
                 cout << "You find an <item>. It might be useful. Pick it up?" << endl;
                 cout << "Yes or no" << endl;
                 cin >> playerAction;
-                if(playerAction == "Yes"){
+                if(playerAction == "yes"){
                     cout << "You pick the <item> up." << endl;
                     cout << "Obtained <item>!" << endl;
+                } else if(playerAction == "no"){
+                    cout << "You decide to leave the <item> where it is." << endl;
                 }
             }
             break;
