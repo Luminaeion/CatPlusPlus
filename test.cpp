@@ -6,15 +6,9 @@
 #include <fstream>
 #include <bits/stdc++.h>
 
-using namespace std;
+#include "playerFunctions.hpp"
 
-// function to make player inputs lowercase to match what the program expects
-string playerChoice() {
-    string playerInput;
-    cin >> playerInput;
-    transform(playerInput.begin(), playerInput.end(), playerInput.begin(), ::tolower);
-    return playerInput;
-}
+using namespace std;
 
 int main()
 {
@@ -65,7 +59,7 @@ int main()
     
     // Random encounter test
     int randomEvent;
-    int encounterNum;
+    int encounterNum = 0;
     srand((unsigned)time(0));
     int rnum = (rand()%10) + 1;
     int pnum = (rand()%10) + 1;
