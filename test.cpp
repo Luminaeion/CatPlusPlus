@@ -20,6 +20,7 @@ int main()
     char name[50];
     cout << "Hello. You are a cat." << endl;
     Cat catProtag;
+    // Stat display! :)
     cout << "Cat\n"
         << "- MaxHP: " << catProtag.getMaxHP() << '\n'
         << "- Strength: " << catProtag.getStrength() << endl;

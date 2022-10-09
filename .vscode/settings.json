@@ -71,6 +71,9 @@
         "typeindex": "cpp",
         "string_view": "cpp",
         "rope": "cpp",
-        "slist": "cpp"
+        "slist": "cpp",
+        "strstream": "cpp",
+        "any": "cpp",
+        "optional": "cpp"
     }
 }
