@@ -28,7 +28,20 @@ int main()
     cin.getline(name, 50);
     cout << "Welcome, " << name << "." << endl;
 
+    cout << "\n--------------------- LVLUP TEST BEGIN ---------------------" << endl;
 
+    Cat protag;
+    for(int i = 0; i < 4; i++) {
+        cout
+        << "Cat - lvl " << protag.getLvl() << '\n'
+        << "- Exp: " << protag.getCurrentEXP() << "/" << protag.getExptoLvlup() << '\n'
+        << "- MaxHP: " <<ye protag.getMaxHP() << '\n'
+        << "- Strength: " << protag.getStrength() << endl;
+    if(i < 5)
+    protag.gainEXP(100u);
+    }
+
+    cout << "\n--------------------- LVLUP TEST END ---------------------" << endl;
 
     // Test function to make player inputs lowercase
     cout << "What colour is your fur?" << endl;
@@ -57,9 +70,9 @@ int main()
         cout << "Input not recognised. Please try again." << endl;
         goto retry;
     }
-
-    string wanderOpt;
+    
     int encounterNum = 0;
+    string wanderOpt;
     repeat:
     cout << "You wander around but come across nothing of interest. Keep wandering?" << endl;
     cin >> wanderOpt;
@@ -154,9 +167,8 @@ int main()
                 rnum == pnum;
                 goto forceEncounter;
             } else {
-                encounterNum++;
+                encounterNum++;goto repeat;
             }
-            goto repeat;
         }
     }/*  else if(wanderOpt == "openinventory"){
         cout << "You open your inventory." << endl;

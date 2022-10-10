@@ -5,7 +5,6 @@ typedef std::uint16_t lvltype;
 
 class lvlSystem {
 public:
-    static const lvltype lvlScalar = 2u;
     static const exptype lvl2 = 100u;
 
     lvlSystem() { 
@@ -16,19 +15,28 @@ public:
 
     void gainEXP(exptype gained_exp) {
         CurrentEXP += gained_exp;
-        check_if_leveled();
+        while(check_if_leveled()) {}
     }
+
+    lvltype getLvl() { return CurrentLVL; }
+    exptype getCurrentEXP() { return CurrentEXP; }
+    exptype getExptoLvlup() { return EXPtoLvlup; }
+
+    virtual void lvlUp() = 0;
 
 protected:
     lvltype CurrentLVL;
     exptype CurrentEXP;
     exptype EXPtoLvlup;
 
-    void check_if_leveled(){
+    bool check_if_leveled(){
         static const lvltype lvlScalar = 2u;
-        if(CurrentEXP > EXPtoLvlup) {
+        if(CurrentEXP >= EXPtoLvlup) {
             CurrentLVL++;
+            lvlUp();
             EXPtoLvlup *= lvlScalar;
+            return true;
         }
+        return false;
     }
 };

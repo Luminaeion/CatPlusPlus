@@ -13,6 +13,11 @@ public:
         Str = s;
     }
     stattype getStrength() { return Str; }
+
+protected:
+    void increaseStats(stattype s){
+        Str += s;
+    }
 };
 
 // Need to implement def into hp
