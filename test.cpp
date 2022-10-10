@@ -35,7 +35,7 @@ int main()
         cout
         << "Cat - lvl " << protag.getLvl() << '\n'
         << "- Exp: " << protag.getCurrentEXP() << "/" << protag.getExptoLvlup() << '\n'
-        << "- MaxHP: " <<ye protag.getMaxHP() << '\n'
+        << "- MaxHP: " << protag.getMaxHP() << '\n'
         << "- Strength: " << protag.getStrength() << endl;
     if(i < 5)
     protag.gainEXP(100u);
