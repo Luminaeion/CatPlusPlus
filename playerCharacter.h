@@ -52,40 +52,34 @@ protected:
 #define PCCONSTRUCT : playerCharacterDelegate() {\
         HP->setMax(BaseHP);\
         HP->increaseCurrent(BaseHP);\
-        increaseStats(BaseStr);\
-    }
+        increaseStats(BaseStr, BaseInt, BaseAgi);\
+    };
 
 #define LEVELUP void lvlUp() override {\
-        HP->setMax((welltype)(BaseHP/2.f) + HP->getMax());\
-        HP->increaseCurrent((welltype)(BaseHP/2.f));\
-        increaseStats((stattype)(BaseStr+1u)/2.f);\
+        HP->setMax((welltype)(BaseHP / 2.f) + HP->getMax());\
+        HP->increaseCurrent((welltype)(BaseHP / 2.f));\
+        increaseStats((stattype)((BaseStr + 1u) / 2.f), (stattype)((BaseInt + 1u) / 2.f), (stattype)((BaseAgi + 1u) / 2.f));\
     }
 
-class Cat : public playerCharacterDelegate
-{
-// Stats for our cat!
-// This class also works as a template for other (rpg) classes!
-
-public:
-// Base stats
-    // Base health points 14
-    static const stattype BaseHP = (welltype)14u;
-    // Base strength 2
-    static const stattype BaseStr = (stattype)2u;
-
-// retrieves className
-    string getClassName() override { return string("Cat"); }
-
-// create character w/ base stats
-    Cat() PCCONSTRUCT
-
-private: 
-    LEVELUP
+#define CHARACTERCLASS(classname, basehp, basestr, baseint, baseagi)\
+class classname : public playerCharacterDelegate {\
+public:\
+    static const welltype BaseHP = (welltype)basehp;\
+    static const stattype BaseStr = (stattype)basestr;\
+    static const stattype BaseInt = (stattype)baseint;\
+    static const stattype BaseAgi = (stattype)baseagi;\
+    string getClassName() override { return string(#classname); }\
+    classname() PCCONSTRUCT \
+private:\
+    LEVELUP \
 };
+
+CHARACTERCLASS(Cat, 14, 2, 4, 7)
 
 class playerCharacter {
 private:
     playerCharacterDelegate* pcClass;
+    //InventoryDelegate* inv;
 
 public:
     playerCharacter() = delete;
@@ -99,6 +93,10 @@ public:
     welltype getMax() { return pcClass->HP->getMax(); }
     welltype getStrength() { return pcClass->getStrength(); }
     welltype getCurrentHP() { return pcClass->HP->getCurrent(); }
+    welltype getIntellect() { return pcClass->getIntellect(); }
+    welltype getAgility() { return pcClass->getAgility(); }
+    welltype getDefence() { return pcClass->getDefence(); }
+    welltype getResistance() { return pcClass->getResistance(); }
     
     void gainEXP(exptype amt) { pcClass->gainEXP(amt); }
     void takeDmg(welltype amt) { pcClass->HP->reduceCurrent(amt); }

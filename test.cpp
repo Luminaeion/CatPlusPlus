@@ -32,7 +32,11 @@ int main()
         << " - lvl  " << protag.getLvl() << '\n'
         << "- Exp:  " << protag.getCurrentEXP() << "/" << protag.getExptoLvlup() << '\n'
         << "- HP:   " << protag.getCurrentHP() << "/" << protag.getMax() << '\n'
-        << "- Strength: " << protag.getStrength() << endl;
+        << "- Strength: " << protag.getStrength() << '\n'
+        << "- Intellect: " << protag.getIntellect() << '\n'
+        << "- Agility: " << protag.getAgility() << '\n'
+        << "- Defence: " << protag.getDefence() << '\n'
+        << "- Elemental resistance: " << protag.getResistance() << endl;
     if(i < 5)
     protag.gainEXP(100u);
     }
