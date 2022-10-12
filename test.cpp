@@ -104,7 +104,6 @@ int main()
                 {
                     cout << "You find an <item>. It might be useful. \n Pick it up? [yes/no]" << endl;
                     string playerAction = playerChoice();
-                    cin >> playerAction;
                     if(playerAction == "yes"){
                         cout << "You pick the <item> up." << endl;
                         cout << "Obtained <item>!" << endl;

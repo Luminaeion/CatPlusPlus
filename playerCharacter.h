@@ -74,7 +74,8 @@ private:\
     LEVELUP \
 };
 
-CHARACTERCLASS(Cat, 14, 2, 4, 7)
+// this next row is all that's needed to create a character class :)
+CHARACTERCLASS(Cat, 14, 2, 4, 7) // (rpg)class, hp, str, int, agi
 
 class playerCharacter {
 private:

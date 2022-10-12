@@ -14,7 +14,7 @@ public:
         Str = s;
         Int = i;
         Agi = a;
-        Def = a;
+        Def = d;
         Res = r;
     }
     stattype getStrength() { return Str; }
