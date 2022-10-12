@@ -6,8 +6,8 @@
 #include <fstream>
 #include <bits/stdc++.h>
 
-#include "cat.h"
-#include "playerFunctions.hpp"
+#include "playerFunctions.h"
+#include "playerCharacter.h"
 
 using namespace std;
 
@@ -19,29 +19,25 @@ int main()
     // Start of the game, player input test
     char name[50];
     cout << "Hello. You are a cat." << endl;
-    Cat catProtag;
-    // Stat display! :)
-    cout << "Cat\n"
-        << "- MaxHP: " << catProtag.getMaxHP() << '\n'
-        << "- Strength: " << catProtag.getStrength() << endl;
     cout << "What is your name?" << endl;
     cin.getline(name, 50);
     cout << "Welcome, " << name << "." << endl;
 
-    cout << "\n--------------------- LVLUP TEST BEGIN ---------------------" << endl;
+    cout << "\n--------------------- TEST BEGIN ---------------------" << endl;
 
-    Cat protag;
+    playerCharacter protag(new Cat());
     for(int i = 0; i < 4; i++) {
         cout
-        << "Cat - lvl " << protag.getLvl() << '\n'
-        << "- Exp: " << protag.getCurrentEXP() << "/" << protag.getExptoLvlup() << '\n'
-        << "- MaxHP: " << protag.getMaxHP() << '\n'
+        << protag.getClassName()
+        << " - lvl  " << protag.getLvl() << '\n'
+        << "- Exp:  " << protag.getCurrentEXP() << "/" << protag.getExptoLvlup() << '\n'
+        << "- HP:   " << protag.getCurrentHP() << "/" << protag.getMax() << '\n'
         << "- Strength: " << protag.getStrength() << endl;
     if(i < 5)
     protag.gainEXP(100u);
     }
 
-    cout << "\n--------------------- LVLUP TEST END ---------------------" << endl;
+    cout << "\n--------------------- TEST END ---------------------" << endl;
 
     // Test function to make player inputs lowercase
     cout << "What colour is your fur?" << endl;
@@ -52,7 +48,7 @@ int main()
     cout << "You encounter a *menacing* ball of yarn." << endl;
     retry:
     cout << "What will you do?" << endl;
-    cout << "[ Look ] - [ Paw ] - [ Leave ]" << endl;
+    cout << "[ look / paw / leave ]" << endl;
     string tutorialChoice = playerChoice();
     
     if(tutorialChoice == "look")
@@ -74,7 +70,7 @@ int main()
     int encounterNum = 0;
     string wanderOpt;
     repeat:
-    cout << "You wander around but come across nothing of interest. Keep wandering?" << endl;
+    cout << "You wander around but come across nothing of interest. \n Keep wandering? [yes/no]" << endl;
     cin >> wanderOpt;
     if(wanderOpt == "yes"){
 
@@ -89,10 +85,8 @@ int main()
                 case 1:
                 case 2:
                 {
-                    string playerAction;
-                    cout << "You find a <food item> that looks particularly delicious. Pick it up?" << endl;
-                    cout << "Yes or no" << endl;
-                    cin >> playerAction;
+                    cout << "You find a <food item> that looks particularly delicious. \n Pick it up? [yes/no]" << endl;
+                    string playerAction = playerChoice();
                     if(playerAction == "yes"){
                         cout << "You pick it up." << endl;
                         cout << "Obtained <food item>!" << endl;
@@ -104,9 +98,8 @@ int main()
                 case 3:
                 case 4:
                 {
-                    string playerAction;
-                    cout << "You find an <item>. It might be useful. Pick it up?" << endl;
-                    cout << "Yes or no" << endl;
+                    cout << "You find an <item>. It might be useful. \n Pick it up? [yes/no]" << endl;
+                    string playerAction = playerChoice();
                     cin >> playerAction;
                     if(playerAction == "yes"){
                         cout << "You pick the <item> up." << endl;
@@ -119,10 +112,8 @@ int main()
                 case 5:
                 case 6:
                 {
-                    string playerAction;
-                    cout << "An <enemy> appears! They haven't noticed you yet." << endl;
-                    cout << "What will you do?" << endl;
-                    cin >> playerAction;
+                    cout << "An <enemy> appears! They haven't noticed you yet. \n What will you do? [run/fight]" << endl;
+                    string playerAction = playerChoice();
                     if(playerAction == "run"){
                         cout << "You flee before you're noticed." << endl;
                         cout << "Escaped safely." << endl;
@@ -134,10 +125,8 @@ int main()
                 case 7:
                 case 8:
                 {
-                    string playerAction;
-                    cout << "You find an <item>. It might be useful. Pick it up?" << endl;
-                    cout << "Yes or no" << endl;
-                    cin >> playerAction;
+                    cout << "You find an <item>. It might be useful. \n Pick it up? [yes/no]" << endl;
+                    string playerAction = playerChoice();
                     if(playerAction == "yes"){
                         cout << "You pick the <item> up." << endl;
                         cout << "Obtained <item>!" << endl;
@@ -149,10 +138,8 @@ int main()
                 case 9:
                 case 10:
                 {
-                    string playerAction;
-                    cout << "You find an <item>. It might be useful. Pick it up?" << endl;
-                    cout << "Yes or no" << endl;
-                    cin >> playerAction;
+                    cout << "You find an <item>. It might be useful. \n Pick it up? [yes/no]" << endl;
+                    string playerAction = playerChoice();
                     if(playerAction == "yes"){
                         cout << "You pick the <item> up." << endl;
                         cout << "Obtained <item>!" << endl;
