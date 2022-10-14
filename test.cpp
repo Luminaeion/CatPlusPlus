@@ -72,10 +72,9 @@ int main()
     }
     
     int encounterNum = 0;
-    string wanderOpt;
     repeat:
     cout << "You wander around but come across nothing of interest. \n Keep wandering? [yes/no]" << endl;
-    cin >> wanderOpt;
+    string wanderOpt = playerChoice();
     if(wanderOpt == "yes"){
 
         // Random encounter test
@@ -157,7 +156,8 @@ int main()
                 rnum == pnum;
                 goto forceEncounter;
             } else {
-                encounterNum++;goto repeat;
+                encounterNum++;
+                goto repeat;
             }
         }
     }/*  else if(wanderOpt == "openinventory"){
