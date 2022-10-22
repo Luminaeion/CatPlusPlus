@@ -1,8 +1,10 @@
 #include <cstdint>
+#include <vector>
 #include <memory>
 
 #include "stats.h"
 #include "pointWell.h"
+#include "ability.h"
 
 typedef std::uint64_t exptype;
 typedef std::uint16_t lvltype;
@@ -12,10 +14,10 @@ public:
     static const exptype lvl2 = 100u;
 
     playerCharacterDelegate() : Stats(0u) { 
-        CurrentLVL = 1u; 
-        CurrentEXP = 0u;
+        CurrentLVL = (lvltype)1u; 
+        CurrentEXP = (exptype)0u;
         EXPtoLvlup = lvl2;
-        HP = make_unique<pointWell>();
+        HP = make_unique<pointWell>(1u, 1u);
     }
 
     void gainEXP(exptype gained_exp) {
@@ -31,6 +33,9 @@ public:
     virtual string getClassName() = 0;
 
     unique_ptr<pointWell> HP;
+    unique_ptr<pointWell> MP;
+
+    vector<Ability> Abilities;
 
 protected:
     lvltype CurrentLVL;
@@ -49,55 +54,92 @@ protected:
     }
 };
 
-#define PCCONSTRUCT : playerCharacterDelegate() {\
+#define PCCONSTRUCT\
         HP->setMax(BaseHP);\
         HP->increaseCurrent(BaseHP);\
-        increaseStats(BaseStr, BaseInt, BaseAgi);\
-    };
+        if(MP) { \
+            MP->setMax(BaseMP);\
+            MP->increaseCurrent(BaseMP);\
+        }\
+        increaseStats(BaseStr, BaseInt, BaseAgi);
 
-#define LEVELUP void lvlUp() override {\
+#define LEVELUP \
         HP->setMax((welltype)(BaseHP / 2.f) + HP->getMax());\
         HP->increaseCurrent((welltype)(BaseHP / 2.f));\
-        increaseStats((stattype)((BaseStr + 1u) / 2.f), (stattype)((BaseInt + 1u) / 2.f), (stattype)((BaseAgi + 1u) / 2.f));\
+        if (MP) { \
+            MP->setMax((welltype)(BaseMP / 2.f) + MP->getMax());\
+            MP->increaseCurrent((welltype)(BaseMP / 2.f));\
+        }\
+        increaseStats((stattype)((BaseStr + 1u) / 2.f), (stattype)((BaseInt + 1u) / 2.f), (stattype)((BaseAgi + 1u) / 2.f));
+
+
+class Cat : public playerCharacterDelegate {
+public:
+    static const welltype BaseHP = (welltype)14;
+    static const stattype BaseStr = (stattype)2;
+    static const stattype BaseInt = (stattype)4;
+    static const stattype BaseAgi = (stattype)7;
+    static const welltype BaseMP = (welltype)10u;
+    string getClassName() override { return string("Cat"); }
+    Cat() : playerCharacterDelegate() {
+        MP = make_unique<pointWell>(); // make sure to init before PCCONSTRUCT macro
+        PCCONSTRUCT 
+
+        Abilities.emplace_back("Purr", 2u, 1u, abilityTarget::SELF, 7u, abilityScaler::INT);
     }
-
-#define CHARACTERCLASS(classname, basehp, basestr, baseint, baseagi)\
-class classname : public playerCharacterDelegate {\
-public:\
-    static const welltype BaseHP = (welltype)basehp;\
-    static const stattype BaseStr = (stattype)basestr;\
-    static const stattype BaseInt = (stattype)baseint;\
-    static const stattype BaseAgi = (stattype)baseagi;\
-    string getClassName() override { return string(#classname); }\
-    classname() PCCONSTRUCT \
-private:\
-    LEVELUP \
+private:
+ void lvlUp() override{
+    LEVELUP 
+    if(CurrentLVL == 2){
+        // gain new ability :D
+        Abilities.emplace_back("Swipe", 2u, 2u, abilityTarget::ENEMY, 5u, abilityScaler::STR);
+    }
+}
 };
-
-// this next row is all that's needed to create a character class :)
-CHARACTERCLASS(Cat, 14, 2, 4, 7) // (rpg)class, hp, str, int, agi
 
 class playerCharacter {
 private:
     playerCharacterDelegate* pcClass;
-    //InventoryDelegate* inv;
 
 public:
     playerCharacter() = delete;
     playerCharacter(playerCharacterDelegate* pc) : pcClass(pc) {}
     ~playerCharacter() { delete pcClass; pcClass = nullptr; }
 
+    // class name
     string getClassName() { return pcClass->getClassName(); }
+    
+    // lvl
     lvltype getLvl() { return pcClass->getLvl(); }
     exptype getCurrentEXP() { return pcClass->getCurrentEXP(); }
     exptype getExptoLvlup() { return pcClass->getExptoLvlup(); }
-    welltype getMax() { return pcClass->HP->getMax(); }
-    welltype getStrength() { return pcClass->getStrength(); }
+
+    // hp & mp
     welltype getCurrentHP() { return pcClass->HP->getCurrent(); }
+    welltype getMaxHP() { return pcClass->HP->getMax(); }
+
+    // check if character has mp
+    welltype getCurrentMP() { 
+      if(pcClass->MP)
+        return pcClass->MP->getCurrent();
+      else
+        return 0;
+    }
+    welltype getMaxMP() { 
+      if(pcClass->MP)
+        return pcClass->MP->getMax(); 
+      else
+        return 0;
+    }
+
+    // stats
+    welltype getStrength() { return pcClass->getStrength(); }
     welltype getIntellect() { return pcClass->getIntellect(); }
     welltype getAgility() { return pcClass->getAgility(); }
     welltype getDefence() { return pcClass->getDefence(); }
     welltype getResistance() { return pcClass->getResistance(); }
+
+    vector<Ability> getAbilityList() { return pcClass->Abilities; }
     
     void gainEXP(exptype amt) { pcClass->gainEXP(amt); }
     void takeDmg(welltype amt) { pcClass->HP->reduceCurrent(amt); }

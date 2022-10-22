@@ -31,12 +31,21 @@ int main()
         << protag.getClassName()
         << " - lvl  " << protag.getLvl() << '\n'
         << "- Exp:  " << protag.getCurrentEXP() << "/" << protag.getExptoLvlup() << '\n'
-        << "- HP:   " << protag.getCurrentHP() << "/" << protag.getMax() << '\n'
+        << "- HP:   " << protag.getCurrentHP() << "/" << protag.getMaxHP() << '\n'
+        << "- MP:   " << protag.getCurrentMP() << "/" << protag.getMaxMP() << '\n'
         << "- Strength: " << protag.getStrength() << '\n'
         << "- Intellect: " << protag.getIntellect() << '\n'
         << "- Agility: " << protag.getAgility() << '\n'
         << "- Defence: " << protag.getDefence() << '\n'
         << "- Elemental resistance: " << protag.getResistance() << endl;
+
+    auto allAbilities = protag.getAbilityList();
+    
+    cout << "- Abilities:\n";
+    for(auto& abil : allAbilities) {
+        cout << "   -" << abil.Name << '\n';
+    }
+
     if(i < 5)
     protag.gainEXP(100u);
     }

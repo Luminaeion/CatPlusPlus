@@ -48,9 +48,9 @@ public:
 
     pointWell() { CurrentFullness = 1; MaxWell  = 1; }
      
-    pointWell(welltype cHP, welltype mHP){
-        CurrentFullness  = cHP;
-        MaxWell  = mHP;
+    pointWell(welltype c, welltype m){
+        CurrentFullness  = c;
+        MaxWell  = m;
         if(CurrentFullness > MaxWell){
             CurrentFullness = MaxWell;
         }
