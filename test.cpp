@@ -26,7 +26,7 @@ int main()
     cout << "\n--------------------- TEST BEGIN ---------------------" << endl;
 
     playerCharacter protag(new Cat());
-    for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < 7; i++) {
         cout
         << protag.getClassName()
         << " - lvl  " << protag.getLvl() << '\n'

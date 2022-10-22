@@ -72,6 +72,7 @@ protected:
         }\
         increaseStats((stattype)((BaseStr + 1u) / 2.f), (stattype)((BaseInt + 1u) / 2.f), (stattype)((BaseAgi + 1u) / 2.f));
 
+// --- CHARACTER (rpg)CLASS BEGIN ---
 
 class Cat : public playerCharacterDelegate {
 public:
@@ -85,6 +86,7 @@ public:
         MP = make_unique<pointWell>(); // make sure to init before PCCONSTRUCT macro
         PCCONSTRUCT 
 
+        // character has this ability by default
         Abilities.emplace_back("Purr", 2u, 1u, abilityTarget::SELF, 7u, abilityScaler::INT);
     }
 private:
@@ -93,9 +95,20 @@ private:
     if(CurrentLVL == 2){
         // gain new ability :D
         Abilities.emplace_back("Swipe", 2u, 2u, abilityTarget::ENEMY, 5u, abilityScaler::STR);
+        cout << "- GAINED NEW ABILITY SWIPE -" << endl;
+
+        // Stat boosts for lvlups can be done like this:
+        /*
+        MP->setMax(1u + MP->getMax());
+        MP->increaseCurrent(1u);
+
+        increaseStats(0, 1);
+        */
     }
 }
 };
+
+// --- CHARACTER (rpg)CLASS END ---
 
 class playerCharacter {
 private:
