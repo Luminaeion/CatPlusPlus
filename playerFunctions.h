@@ -5,19 +5,16 @@
 
 using namespace std;
 
-// function to make player inputs lowercase to match what the program expects
+// function to make player inputs lowercase to match what the program expects, no spaces
 string playerChoice() {
     string playerInput;
     getline(cin, playerInput);
     playerInput.erase(remove(playerInput.begin(), playerInput.end(), ' '), playerInput.end());
     for(auto& c: playerInput) c = tolower(c,cout.getloc());
-    /*transform(playerInput.begin(), playerInput.end(), playerInput.begin(), ::tolower);
-    playerInput.erase(remove(playerInput.begin(), playerInput.end(), ' '), playerInput.end());*/
     return playerInput;
 }
 
-
-// basically the same function but this one removes only EXCESS whitespace
+// function to remove only excess whitespace
 void remove_extra_whitespaces(const string &input, string &output)
 {
     output.clear();
@@ -25,7 +22,7 @@ void remove_extra_whitespaces(const string &input, string &output)
     [](char a,char b){ return isspace(a) && isspace(b);});  
 }
 
-// function to make player inputs lowercase to match what the program expects
+// make player inputs lowercase to match what the program expects, leaves singular spaces between words
 string longInput() {
     string playerInput;
     string formattedInput;
