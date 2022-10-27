@@ -1,8 +1,9 @@
+#pragma once
 #include "types.h"
-
 #include <string>
+#include "stats.h"
 
-//#include "stats.h"
+using namespace std;
 
 // temp stat boosts
 struct Buff {

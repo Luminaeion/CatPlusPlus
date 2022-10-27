@@ -1,8 +1,6 @@
+#pragma once
 #include "types.h"
 #include <vector>
-
-//typedef std::int16_t stattype;
-// The order of vv^^ these two is vital, "BUFF" HEADER AFTER "STATTYPE" TYPEDEF
 #include "buff.h"
 
 class Stats {
