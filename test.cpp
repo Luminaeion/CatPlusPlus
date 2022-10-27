@@ -33,11 +33,11 @@ int main()
         << "- Exp:  " << protag.getCurrentEXP() << "/" << protag.getExptoLvlup() << '\n'
         << "- HP:   " << protag.getCurrentHP() << "/" << protag.getMaxHP() << '\n'
         << "- MP:   " << protag.getCurrentMP() << "/" << protag.getMaxMP() << '\n'
-        << "- Strength: " << protag.getStrength() << '\n'
-        << "- Intellect: " << protag.getIntellect() << '\n'
-        << "- Agility: " << protag.getAgility() << '\n'
-        << "- Defence: " << protag.getDefence() << '\n'
-        << "- Elemental resistance: " << protag.getResistance() << endl;
+        << "- Strength: " << protag.getTotalStrength() << '\n'
+        << "- Intellect: " << protag.getTotalIntellect() << '\n'
+        << "- Agility: " << protag.getTotalAgility() << '\n'
+        << "- Defence: " << protag.getTotalDefence() << '\n'
+        << "- Elemental resistance: " << protag.getTotalResistance() << endl;
 
     auto allAbilities = protag.getAbilityList();
     
@@ -46,8 +46,15 @@ int main()
         cout << "   -" << abil.Name << '\n';
     }
 
-    if(i < 5)
+    if(i < 1) {
     protag.gainEXP(100u);
+    // debuff test
+    Buff agi_debuff("ConeOfShame", 10, 5, 0, 5, 0, 0, true);
+    protag.applyBuff(agi_debuff);
+    // buff test
+    Buff def_buff("SpikyCollar", 10, 0, 0, 0, 5, 0, false);
+    protag.applyBuff(def_buff);
+    }
     }
 
     cout << "\n--------------------- TEST END ---------------------" << endl;

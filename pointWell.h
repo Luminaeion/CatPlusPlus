@@ -1,7 +1,6 @@
+#include "types.h"
 #include <iostream>
 #include <cstdint>
-
-typedef std::uint32_t welltype;
 
 class pointWell
 {

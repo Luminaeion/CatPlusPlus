@@ -5,9 +5,7 @@
 #include "stats.h"
 #include "pointWell.h"
 #include "ability.h"
-
-typedef std::uint64_t exptype;
-typedef std::uint16_t lvltype;
+#include "types.h"
 
 class playerCharacterDelegate : public Stats {
 public:
@@ -28,6 +26,18 @@ public:
     lvltype getLvl() { return CurrentLVL; }
     exptype getCurrentEXP() { return CurrentEXP; }
     exptype getExptoLvlup() { return EXPtoLvlup; }
+
+    void applyBuff(Buff b){
+        for(auto& buff : Buffs) {
+            // if buff exists, just refresh duration
+            if (b.Name == buff.Name) {
+                buff.Duration = b.Duration;
+                return;
+            }
+        }
+
+        newBuff(b);
+    }
 
     virtual void lvlUp() = 0;
     virtual string getClassName() = 0;
@@ -145,16 +155,27 @@ public:
         return 0;
     }
 
-    // stats
-    welltype getStrength() { return pcClass->getStrength(); }
-    welltype getIntellect() { return pcClass->getIntellect(); }
-    welltype getAgility() { return pcClass->getAgility(); }
-    welltype getDefence() { return pcClass->getDefence(); }
-    welltype getResistance() { return pcClass->getResistance(); }
+    // base stats
+    stattype getBaseStrength() { return pcClass->getBaseStrength(); }
+    stattype getBaseIntellect() { return pcClass->getBaseIntellect(); }
+    stattype getBaseAgility() { return pcClass->getBaseAgility(); }
+    stattype getBaseDefence() { return pcClass->getBaseDefence(); }
+    stattype getBaseResistance() { return pcClass->getBaseResistance(); }
+
+    // total stats (stats + buffs)
+    stattype getTotalStrength() { return pcClass->getTotalStrength(); }
+    stattype getTotalIntellect() { return pcClass->getTotalIntellect(); }
+    stattype getTotalAgility() { return pcClass->getTotalAgility(); }
+    stattype getTotalDefence() { return pcClass->getTotalDefence(); }
+    stattype getTotalResistance() { return pcClass->getTotalResistance(); }
 
     vector<Ability> getAbilityList() { return pcClass->Abilities; }
     
     void gainEXP(exptype amt) { pcClass->gainEXP(amt); }
     void takeDmg(welltype amt) { pcClass->HP->reduceCurrent(amt); }
     void heal(welltype amt) { pcClass->HP->increaseCurrent(amt); }
+
+    void applyBuff(Buff buff) {
+        pcClass->applyBuff(buff);
+    }
 };
