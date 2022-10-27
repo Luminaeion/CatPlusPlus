@@ -1,24 +1,28 @@
 #pragma once
 #include "types.h"
-#include <string>
+#include "coreStats.h"
 #include "stats.h"
-
-using namespace std;
+#include <string>
 
 // temp stat boosts
 struct Buff {
-    
-    Buff(string name, uint16_t dur, stattype str = 0, stattype intel = 0, stattype agi = 0, stattype def = 0, stattype res = 0, bool isdebuff = false) : Name(name), Duration(dur), Str(str), Int(intel), Agi(agi), Def(def), Res(res), isDebuff(isdebuff) 
-    {};
+    Buff(const char* name, stattype str = 0, stattype intel = 0, stattype agi = 0, stattype def = 0, stattype res = 0, uint16_t dur = 2u, bool isdebuff = false) : Name(name), Duration(dur), isDebuff(isdebuff) 
+    {
+        BuffedStats.Str = str;
+        BuffedStats.Agi = agi;
+        BuffedStats.Int = intel;
+        BuffedStats.Def = def;
+        BuffedStats.Res = res;
+    }
+
+    Buff(const char* name, coreStats cs, uint16_t dur = 2u, bool isdebuff = false) : Name(name), Duration(dur), isDebuff(isdebuff) {
+        BuffedStats = cs;
+    }
 
     string Name;
     uint16_t Duration;
 
-    stattype Str; // Strength  // 0xFF
-    stattype Int; // Intellect
-    stattype Agi; // Agility
-    stattype Def; // Defence
-    stattype Res; // Elemental resistance
+    coreStats BuffedStats;
 
     bool isDebuff;
 };
