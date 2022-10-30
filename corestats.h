@@ -1,9 +1,10 @@
+#pragma once
 #include "types.h"
 
 struct coreStats {
-    stattype Str = 1; // Strength
-    stattype Int = 1; // Intellect
-    stattype Agi = 1; // Agility
+    stattype Str = 0; // Strength
+    stattype Int = 0; // Intellect
+    stattype Agi = 0; // Agility
     stattype Def = 0; // Defence
     stattype Res = 0; // Elemental resistance
 

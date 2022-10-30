@@ -9,8 +9,6 @@
 #include "playerFunctions.h"
 #include "playerCharacter.h"
 
-using namespace std;
-
 int main()
 {
 
@@ -26,6 +24,22 @@ int main()
     cout << "\n--------------------- TEST BEGIN ---------------------" << endl;
 
     playerCharacter protag(new Cat());
+    
+
+    // Equipment test
+    {
+        coreStats spikycollar_stats;
+        spikycollar_stats.Def = 5;
+        spikycollar_stats.Res = 3;
+        Armour* SpikyCollar = new Armour("Spiky Collar", spikycollar_stats, ARMOURSLOT::NECK);
+        if(protag.equip(SpikyCollar)) {
+            cout << "Equipped successfully! :3\n";
+        } else {
+            cout << "Equip failed.. 3:\n";
+        }
+    }
+    
+
     for(int i = 0; i < 7; i++) {
         cout
         << protag.getClassName()
@@ -44,6 +58,15 @@ int main()
     cout << "- Abilities:\n";
     for(auto& abil : allAbilities) {
         cout << "   -" << abil.Name << '\n';
+    }
+
+    cout << "- Armour:\n";
+    for(int i = 0; i < (int)ARMOURSLOT::NUM_SLOTS; i++) {
+        const Armour* tmp = dynamic_cast<Armour*>(protag.getEquippedArmour(i));        
+        
+        if(tmp) {
+            cout << " " << tmp->Name << "(+" << tmp->Stats.Def << " def, +" << tmp->Stats.Res << " res)" << '\n';
+        }
     }
 
     if(i < 1) {
