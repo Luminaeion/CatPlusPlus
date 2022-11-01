@@ -6,7 +6,7 @@
 #include "pointWell.h"
 #include "ability.h"
 #include "types.h"
-#include "equipment.h"
+#include "item.h"
 
 class playerCharacterDelegate : public Stats {
 public:
@@ -46,6 +46,9 @@ public:
     unique_ptr<pointWell> MP;
 
     vector<Ability> Abilities;
+    vector<Buff> getBuffList() {
+        return Buffs;
+    }
 
 protected:
     lvltype CurrentLVL;
@@ -123,8 +126,8 @@ private:
 class playerCharacter {
 private:
     playerCharacterDelegate* pcClass;
-    Equipment* equippedArmour[(unsigned long long)ARMOURSLOT::NUM_SLOTS];
-    Equipment* equippedWeapons[(unsigned long long)WEAPONSLOT::NUM_SLOTS];
+    EquipmentDelegate* equippedArmour[(unsigned long long)ARMOURSLOT::NUM_SLOTS];
+    EquipmentDelegate* equippedWeapons[(unsigned long long)WEAPONSLOT::NUM_SLOTS];
 
 public:
     playerCharacter(playerCharacterDelegate* pc) : pcClass(pc) {
@@ -215,11 +218,17 @@ public:
         }
 
     vector<Ability> getAbilityList() { return pcClass->Abilities; }
+    vector<Buff> getBuffList() { return pcClass->getBuffList(); }
 
     // terrible but works..
-    Equipment* getEquippedArmour(unsigned long long i) { 
+    EquipmentDelegate* getEquippedArmour(unsigned long long i) { 
         //return (dynamic_cast<Armour*>(equippedArmour[i])); 
-        return equippedArmour[i];
+        return (dynamic_cast<Armour*>(equippedArmour[i]));
+    }
+
+    EquipmentDelegate* getEquippedWeapon(unsigned long long i) { 
+        //return (dynamic_cast<Armour*>(equippedArmour[i])); 
+        return (dynamic_cast<Weapon*>(equippedWeapons[i]));
     }
     
     // modifiers
@@ -232,8 +241,13 @@ public:
     }
 
     // update when there is an inventory
-    bool equip(Equipment* thing) {
-        Armour* armour = dynamic_cast<Armour*>(thing);
+    bool equip(Item* item_to_equip) {
+        if(item_to_equip)
+            return false;
+        if(!item_to_equip->getData())
+            return false;
+
+        Armour* armour = dynamic_cast<Armour*>(item_to_equip->_data);
         if(armour) {
             // equip armour
             unsigned long long slot_num = (unsigned long long)armour->Slot;
@@ -251,7 +265,7 @@ public:
 
             return true;
         }
-        Weapon* weapon = dynamic_cast<Weapon*>(thing);
+        Weapon* weapon = dynamic_cast<Weapon*>(item_to_equip->_data);
         if(weapon) {
             // equip weapon
             unsigned long long slot_num = (unsigned long long)weapon->Slot;

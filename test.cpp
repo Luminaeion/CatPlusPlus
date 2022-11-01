@@ -8,6 +8,7 @@
 
 #include "playerFunctions.h"
 #include "playerCharacter.h"
+#include "itemManager.h"
 
 int main()
 {
@@ -31,14 +32,25 @@ int main()
         coreStats spikycollar_stats;
         spikycollar_stats.Def = 5;
         spikycollar_stats.Res = 3;
-        Armour* SpikyCollar = new Armour("Spiky Collar", spikycollar_stats, ARMOURSLOT::NECK);
+        
+        Item* SpikyCollar = itemManager::createArmour("Spiky Collar", spikycollar_stats, ARMOURSLOT::NECK);
         if(protag.equip(SpikyCollar)) {
-            cout << "Equipped successfully! :3\n";
+            cout << "Equip succeeded! :3\n";
         } else {
             cout << "Equip failed.. 3:\n";
         }
     }
-    
+    {
+        coreStats ironclaws_stats;
+        ironclaws_stats.Str = 5;
+        
+        Item* IronClaws = itemManager::createWeapon("Iron Claws", ironclaws_stats, WEAPONSLOT::MELEE, 3, 9);
+        if(protag.equip(IronClaws)) {
+            cout << "Equip succeeded! :3\n";
+        } else {
+            cout << "Equip failed.. 3:\n";
+        }
+    }
 
     for(int i = 0; i < 7; i++) {
         cout
@@ -52,9 +64,14 @@ int main()
         << "- Agility: " << protag.getTotalAgility() << '\n'
         << "- Defence: " << protag.getTotalDefence() << '\n'
         << "- Elemental resistance: " << protag.getTotalResistance() << endl;
+    
+    auto allBuffs = protag.getBuffList();
+    cout << "- Buffs:\n";
+    for(auto& buff : allBuffs) {
+        cout << "   -" << buff.Name << '\n';
+    }
 
     auto allAbilities = protag.getAbilityList();
-    
     cout << "- Abilities:\n";
     for(auto& abil : allAbilities) {
         cout << "   -" << abil.Name << '\n';
