@@ -284,6 +284,37 @@ public:
         return false;
     }
     
+    // update when there is an inventory
+    bool use(Item* item_to_use) {
+        if(!item_to_use)
+            return false;
+        if(!item_to_use->getData())
+            return false;
+        
+        Potion* potion = dynamic_cast<Potion*>(item_to_use->_data);
+        if(potion){
+            // apply buff if there is one
+            if(potion->buff) {
+                applyBuff(*potion->buff);
+            }
+
+            // if full health and trying to use heal potion, don't use potion
+            if(pcClass->HP->isFull() && !potion->buff)
+                return false; // don't use potion
+
+            // increse hp by amount potion heals (could be 0, that's fine)
+            pcClass->HP->increaseCurrent(potion->healAmount);
+            
+            // potion used, reduce quantity
+            potion->Quantity--;
+            if(potion->Quantity == 0) {
+                delete potion;
+            }
+            return true;
+        }
+        return false;
+    }
+
     // deleted constructors
     playerCharacter() = delete;
     playerCharacter(const playerCharacter&) = delete;

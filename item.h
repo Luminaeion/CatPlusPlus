@@ -11,21 +11,24 @@ protected:
     ItemDelegate(std::string name) : Name(name) {}
 };
 
-// use this one in runtime code
-class Item {
+#define GETTYPE const char* getType() override { return typeid(*this).name(); };
+
+class Potion final : public ItemDelegate {
 public:
-    ItemDelegate* _data;
-    const ItemDelegate* getData() { return _data; }
-    ~Item() {
-        delete _data;
-        _data = nullptr;
+    welltype healAmount;
+    itemCount Quantity;
+    Buff* buff;
+    GETTYPE
+
+    ~Potion() {
+        if(buff)
+            delete buff;
     }
 private:
-    Item(ItemDelegate* item) : _data(item) {}
-    friend class itemManager;
-    friend class PlayerCharacter;
-};
+    Potion(string name, welltype hp_heal = 1u, itemCount quant = 1u, Buff* buf = nullptr) : ItemDelegate(name), healAmount(hp_heal), Quantity(quant), buff(buf) {}
 
+    friend class itemManager;
+};
 
 class EquipmentDelegate : public ItemDelegate {
 public:
@@ -63,7 +66,7 @@ public:
     dmgtype minDMG;
     dmgtype maxDMG;
     bool is2H;
-    const char* getType() override { return typeid(*this).name(); };
+    GETTYPE
     
 private:
     Weapon(std::string name, coreStats cstats, WEAPONSLOT slot, dmgtype min, dmgtype max,  bool twohanded = false) : EquipmentDelegate(name, cstats), Slot(slot), minDMG(min), maxDMG(max), is2H(twohanded) {}
@@ -73,4 +76,21 @@ private:
     Weapon(const Weapon&&) = delete; // no moving
 
     friend class itemManager;
+};
+
+// use this one in runtime code
+class Item {
+public:
+    ItemDelegate* _data;
+    const ItemDelegate* getData() { return _data; }
+    ~Item() {
+        if(_data) {
+            delete _data;
+            _data = nullptr;
+        }
+    }
+private:
+    Item(ItemDelegate* item) : _data(item) {}
+    friend class itemManager;
+    friend class PlayerCharacter;
 };

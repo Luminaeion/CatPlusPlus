@@ -41,10 +41,7 @@ int main()
         }
     }
     {
-        coreStats ironclaws_stats;
-        ironclaws_stats.Str = 5;
-        
-        Item* IronClaws = itemManager::createWeapon("Iron Claws", ironclaws_stats, WEAPONSLOT::MELEE, 3, 9);
+        Item* IronClaws = itemManager::createWeapon("Iron Claws", coreStats(), WEAPONSLOT::MELEE, 3, 9);
         if(protag.equip(IronClaws)) {
             cout << "Equip succeeded! :3\n";
         } else {
@@ -106,6 +103,18 @@ int main()
         }
     }
 
+    cout << "hp before dmg: " << protag.getCurrentHP() << '\n';
+
+    protag.takeDmg(4);
+
+    Item* HealPotion = itemManager::CreatePotion("Small healing potion", 3u, 3u);
+
+    cout << "hp before potion: " << protag.getCurrentHP() << '\n';
+
+    protag.use(HealPotion);
+
+    cout << "hp after potion: " << protag.getCurrentHP() << '\n';
+
     cout << "\n--------------------- TEST END ---------------------" << endl;
 
     // Test function to make player inputs lowercase
@@ -127,6 +136,7 @@ int main()
     } else if(tutorialChoice == "paw")
     {
         cout << "You paw at the yarn. It rolls over and stops." << endl;
+        protag.gainEXP(2u);
         cout << "You gain 2 exp." << endl;
     } else if(tutorialChoice == "leave")
     {

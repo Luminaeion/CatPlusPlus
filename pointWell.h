@@ -27,6 +27,8 @@ public:
         return CurrentFullness;
     }
 
+    bool isFull() { return (CurrentFullness == MaxWell); }
+
     void reduceCurrent(welltype dmg){
         if(dmg > CurrentFullness){
             CurrentFullness = 0;
