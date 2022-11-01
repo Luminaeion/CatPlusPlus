@@ -222,12 +222,10 @@ public:
 
     // terrible but works..
     EquipmentDelegate* getEquippedArmour(unsigned long long i) { 
-        //return (dynamic_cast<Armour*>(equippedArmour[i])); 
         return (dynamic_cast<Armour*>(equippedArmour[i]));
     }
 
     EquipmentDelegate* getEquippedWeapon(unsigned long long i) { 
-        //return (dynamic_cast<Armour*>(equippedArmour[i])); 
         return (dynamic_cast<Weapon*>(equippedWeapons[i]));
     }
     
@@ -242,7 +240,7 @@ public:
 
     // update when there is an inventory
     bool equip(Item* item_to_equip) {
-        if(item_to_equip)
+        if(!item_to_equip)
             return false;
         if(!item_to_equip->getData())
             return false;

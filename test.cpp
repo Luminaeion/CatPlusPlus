@@ -86,6 +86,15 @@ int main()
         }
     }
 
+    cout << "- Weapons:\n";
+    for(int i = 0; i < (int)WEAPONSLOT::NUM_SLOTS; i++) {
+        const Weapon* tmp = dynamic_cast<Weapon*>(protag.getEquippedWeapon(i));        
+        
+        if(tmp) {
+            cout << " " << tmp->Name << "(" << tmp->minDMG << "-" << tmp->maxDMG << " dmg)" << '\n';
+        }
+    }
+
     if(i < 1) {
     protag.gainEXP(100u);
     // debuff test
