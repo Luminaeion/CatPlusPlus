@@ -9,8 +9,8 @@ struct Buff {
     Buff(const char* name, stattype str = 0, stattype intel = 0, stattype agi = 0, stattype def = 0, stattype res = 0, uint16_t dur = 2u, bool isdebuff = false) : Name(name), Duration(dur), isDebuff(isdebuff) 
     {
         BuffedStats.Str = str;
-        BuffedStats.Agi = agi;
         BuffedStats.Int = intel;
+        BuffedStats.Agi = agi;
         BuffedStats.Def = def;
         BuffedStats.Res = res;
     }

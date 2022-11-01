@@ -36,7 +36,7 @@ public:
                 return;
             }
         }
-        newBuff(b);
+        addNewBuff(b);
     }
 
     virtual void lvlUp() = 0;

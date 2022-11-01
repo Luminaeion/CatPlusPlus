@@ -7,7 +7,7 @@ class Stats {
     coreStats base;
     coreStats fromBuffs;
 public:
-    explicit Stats(stattype s = 1, stattype i = 1, stattype a = 1, stattype d = 0, stattype r = 0) { 
+    explicit Stats(stattype s = 1, stattype i = 0, stattype a = 0, stattype d = 0, stattype r = 0) { 
         base.Str = s;
         base.Int = i;
         base.Agi = a;
@@ -27,7 +27,7 @@ public:
     stattype getTotalResistance() { return base.Res + fromBuffs.Res; }
 
 protected:
-    void newBuff(Buff b) {
+    void addNewBuff(Buff b) {
         for(auto& buff : Buffs) {
             // if buff exists, just refresh duration
             if (b.Name == buff.Name) {
@@ -56,9 +56,8 @@ protected:
 private:
     void recalcBuffs() {
         coreStats tmp_total;
-
-        for(const auto& b : Buffs){
-            if(b.isDebuff){
+        for (const auto& b : Buffs){
+            if (b.isDebuff) {
                 tmp_total -= b.BuffedStats;
             } else {
                 tmp_total += b.BuffedStats;

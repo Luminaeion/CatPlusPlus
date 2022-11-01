@@ -82,7 +82,7 @@ int main()
         const Armour* tmp = dynamic_cast<Armour*>(protag.getEquippedArmour(i));        
         
         if(tmp) {
-            cout << " " << tmp->Name << "(+" << tmp->Stats.Def << " def, +" << tmp->Stats.Res << " res)" << '\n';
+            cout << "   " << tmp->Name << "(+" << tmp->Stats.Def << " def, +" << tmp->Stats.Res << " res)" << '\n';
         }
     }
 
@@ -91,19 +91,19 @@ int main()
         const Weapon* tmp = dynamic_cast<Weapon*>(protag.getEquippedWeapon(i));        
         
         if(tmp) {
-            cout << " " << tmp->Name << "(" << tmp->minDMG << "-" << tmp->maxDMG << " dmg)" << '\n';
+            cout << "   " << tmp->Name << "(" << tmp->minDMG << "-" << tmp->maxDMG << " dmg)" << '\n';
         }
-    }
+        }
 
-    if(i < 1) {
-    protag.gainEXP(100u);
-    // debuff test
-    Buff agi_debuff("ConeOfShame", 10, 5, 0, 5, 0, 0, true);
-    protag.applyBuff(agi_debuff);
-    // buff test
-    Buff def_buff("SpikyCollar", 10, 0, 0, 0, 5, 0, false);
-    protag.applyBuff(def_buff);
-    }
+        if(i < 1) {
+        protag.gainEXP(100u);
+        // debuff test
+        Buff agi_debuff("ConeOfShame", 0, 0, 0, 3, 3, 2, true); // name, dur, str, int, agi, def, res, isDebuff(false by default)
+        protag.applyBuff(agi_debuff);
+        // buff test
+        Buff int_buff("LittleShit", 5, 8, 1, 1, 1);
+        protag.applyBuff(int_buff);
+        }
     }
 
     cout << "\n--------------------- TEST END ---------------------" << endl;
