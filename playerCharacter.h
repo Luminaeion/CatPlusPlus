@@ -46,7 +46,6 @@ public:
     unique_ptr<pointWell> MP;
 
     vector<Ability> Abilities;
-    vector<Item*> Backpack;
     vector<Buff> getBuffList() {
         return Buffs;
     }
@@ -129,7 +128,12 @@ private:
     playerCharacterDelegate* pcClass;
     Item* equippedArmour[(unsigned long long)ARMOURSLOT::NUM_SLOTS];
     Item* equippedWeapons[(unsigned long long)WEAPONSLOT::NUM_SLOTS];
-
+    vector<Item*> Backpack;
+    void cleanup_backpack() {
+        const auto to_remove = stable_partition(Backpack.begin(), Backpack.end(), [](const Item* i) -> bool { return !i->markForDeletion(); }
+        );
+        for_each(to_remove, Backpack.end(), [](Item* i) { delete i; });
+    }
     friend class itemManager;
 public:
     playerCharacter(playerCharacterDelegate* pc) : pcClass(pc) {
@@ -298,7 +302,6 @@ public:
     vector<Ability> getAbilityList() { return pcClass->Abilities; }
     vector<Buff> getBuffList() { return pcClass->getBuffList(); }
 
-    // terrible but works..
     EquipmentDelegate* getEquippedArmour(unsigned long long i) const {
         if(!equippedArmour[i]) return nullptr;
         return (dynamic_cast<Armour*>(equippedArmour[i]->_data));
@@ -310,10 +313,15 @@ public:
     }
     
     // modifiers
-    void gainEXP(exptype amt) { pcClass->gainEXP(amt); }
-    void takeDmg(welltype amt) { pcClass->HP->reduceCurrent(amt); }
-    void heal(welltype amt) { pcClass->HP->increaseCurrent(amt); }
-
+    void gainEXP(exptype amt) { 
+        pcClass->gainEXP(amt); 
+        }
+    void takeDmg(welltype amt) { 
+        pcClass->HP->reduceCurrent(amt); 
+        }
+    void heal(welltype amt) { 
+        pcClass->HP->increaseCurrent(amt); 
+        }
     void applyBuff(Buff buff) {
         pcClass->applyBuff(buff);
     }

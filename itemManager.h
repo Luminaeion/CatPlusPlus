@@ -23,10 +23,8 @@ public:
     }
 
     // update when there is an inventory
-    bool equip(Item* item_to_equip, playerCharacter* p_char) {
-        if(!item_to_equip)
-            return false;
-        if(!item_to_equip->getData())
+    static bool equip(Item* item_to_equip, playerCharacter* p_char) {
+        if(!item_to_equip->getData() || !item_to_equip || !p_char)
             return false;
 
         Armour* armour = dynamic_cast<Armour*>(item_to_equip->_data);
@@ -35,14 +33,11 @@ public:
             unsigned long long slot_num = (unsigned long long)armour->Slot;
 
             if(p_char->equippedArmour[slot_num]) {
-                // delete old data
-                delete p_char->equippedArmour[slot_num];
-                p_char->equippedArmour[slot_num] = nullptr;
+                moveToBackpack(p_char->equippedArmour[slot_num], p_char);
                 p_char->equippedArmour[slot_num] = item_to_equip; // equip new
             } else {
                 p_char->equippedArmour[slot_num] = item_to_equip; // equip new
             }
-
             return true;
         }
         Weapon* weapon = dynamic_cast<Weapon*>(item_to_equip->_data);
@@ -51,9 +46,7 @@ public:
             unsigned long long slot_num = (unsigned long long)weapon->Slot;
 
             if(p_char->equippedWeapons[slot_num]) {
-                // delete old data
-                delete p_char->equippedWeapons[slot_num]; // move to inventory later
-                p_char->equippedWeapons[slot_num] = nullptr;
+                moveToBackpack(p_char->equippedWeapons[slot_num], p_char);
                 // equip new
                 p_char->equippedWeapons[slot_num] = item_to_equip;
             } else {
@@ -62,15 +55,12 @@ public:
             }
             return true;
         }
-
         return false;
     }
     
     // update when there is an inventory
-    bool use(Item* item_to_use, playerCharacter* p_char) {
-        if(!item_to_use)
-            return false;
-        if(!item_to_use->getData())
+    static bool use(Item* item_to_use, playerCharacter* p_char) {
+        if(!item_to_use->getData() || !item_to_use || !p_char)
             return false;
         
         Potion* potion = dynamic_cast<Potion*>(item_to_use->_data);
@@ -90,10 +80,18 @@ public:
             // potion used, reduce quantity
             potion->Quantity--;
             if(potion->Quantity == 0) {
-                delete potion;
+                item_to_use->marked_for_deletion = true;
+                p_char->cleanup_backpack();
             }
             return true;
         }
         return false;
+    }
+
+    static bool moveToBackpack(Item* item_to_move, playerCharacter* p_char) {
+        if(!item_to_move->getData() || !item_to_move || !p_char)
+            return false;
+        p_char->Backpack.push_back(item_to_move);
+            return true;
     }
 };
