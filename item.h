@@ -1,5 +1,6 @@
 #pragma once
 #include "corestats.h"
+#include "buff.h"
 #include <string>
 #include <typeinfo>
 
@@ -90,6 +91,7 @@ public:
         }
     }
 private:
+    bool marked_for_deletion = false;
     Item(ItemDelegate* item) : _data(item) {}
     friend class itemManager;
     friend class PlayerCharacter;
