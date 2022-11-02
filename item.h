@@ -90,7 +90,7 @@ public:
             _data = nullptr;
         }
     }
-    bool markForDeletion() const { return marked_for_deletion; }
+    bool checkIfMarkedForDeletion() const { return marked_for_deletion; }
 private:
     bool marked_for_deletion = false;
     Item(ItemDelegate* item) : _data(item) {}
