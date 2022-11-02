@@ -130,7 +130,7 @@ private:
     Item* equippedWeapons[(unsigned long long)WEAPONSLOT::NUM_SLOTS];
     vector<Item*> Backpack;
     void cleanup_backpack() {
-        const auto to_remove = stable_partition(Backpack.begin(), Backpack.end(), [](const Item* i) -> bool { return !i->markForDeletion(); }
+        const auto to_remove = stable_partition(Backpack.begin(), Backpack.end(), [](const Item* i) -> bool { return !i->checkIfMarkedForDeletion(); }
         );
         for_each(to_remove, Backpack.end(), [](Item* i) { delete i; });
     }
