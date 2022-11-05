@@ -27,7 +27,7 @@ int main()
     playerCharacter protag(new Cat());
     
     // Equipment test
-    /*
+    
     Item* WornCollar = itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK);
     Item* SpikyCollar = itemManager::createArmour("Spiky Collar", coreStats(0, 0, 0, 5, 3), ARMOURSLOT::NECK);
     Item* IronClaws = itemManager::createWeapon("Iron Claws", coreStats(), WEAPONSLOT::MELEE, 3, 9);
@@ -35,7 +35,6 @@ int main()
     itemManager::equip(WornCollar, &protag);
     itemManager::equip(SpikyCollar, &protag);
     itemManager::equip(IronClaws, &protag);
-    */
 
     for(int i = 0; i < 7; i++) {
         std::cout

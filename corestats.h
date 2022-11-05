@@ -8,6 +8,16 @@ struct coreStats {
     stattype Def = 0; // Defence
     stattype Res = 0; // Elemental resistance
 
+    coreStats() {
+        Str = 0;
+        Int = 0;
+        Agi = 0;
+        Def = 0;
+        Res = 0;
+    }
+
+    coreStats(stattype s, stattype i, stattype a, stattype d, stattype r) : Str(s), Int(i), Agi(a), Def(d), Res(r) {}
+
     coreStats& operator+=(const coreStats& rhs) {
         this->Str += rhs.Str;
         this->Int += rhs.Int;
