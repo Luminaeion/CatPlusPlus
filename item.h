@@ -26,7 +26,7 @@ public:
             delete buff;
     }
 private:
-    Potion(string name, welltype hp_heal = 1u, itemCount quant = 1u, Buff* buf = nullptr) : ItemDelegate(name), healAmount(hp_heal), Quantity(quant), buff(buf) {}
+    Potion(std::string name, welltype hp_heal = 1u, itemCount quant = 1u, Buff* buf = nullptr) : ItemDelegate(name), healAmount(hp_heal), Quantity(quant), buff(buf) {}
 
     friend class itemManager;
 };
@@ -41,12 +41,11 @@ private:
 };
 
 enum class ARMOURSLOT { HELMET, CHEST, LEGS, BOOTS, GLOVES, RING1, RING2, NECK, NUM_SLOTS }; // num_slots for making arrays, chill
-
 // this class can't be inherited
 class Armour final : public EquipmentDelegate {
 public: 
     ARMOURSLOT Slot;
-    const char* getType() override { return typeid(*this).name(); }
+    GETTYPE
 
 private:
     // legal way to create armour

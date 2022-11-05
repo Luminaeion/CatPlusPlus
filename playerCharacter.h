@@ -7,6 +7,7 @@
 #include "ability.h"
 #include "types.h"
 #include "item.h"
+#include <algorithm>
 
 class playerCharacterDelegate : public Stats {
 public:
@@ -130,9 +131,11 @@ private:
     Item* equippedWeapons[(unsigned long long)WEAPONSLOT::NUM_SLOTS];
     vector<Item*> Backpack;
     void cleanup_backpack() {
-        const auto to_remove = stable_partition(Backpack.begin(), Backpack.end(), [](const Item* i) -> bool { return !i->checkIfMarkedForDeletion(); }
+        const auto to_remove = stable_partition(Backpack.begin(), Backpack.end(), 
+        [](const Item* i) -> bool { return !i->checkIfMarkedForDeletion(); }
         );
         for_each(to_remove, Backpack.end(), [](Item* i) { delete i; });
+        Backpack.erase(to_remove, Backpack.end());
     }
     friend class itemManager;
 public:
