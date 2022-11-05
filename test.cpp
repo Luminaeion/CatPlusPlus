@@ -68,7 +68,7 @@ int main()
         const Armour* tmp = dynamic_cast<Armour*>(protag.getEquippedArmour(i));        
         
         if(tmp) {
-            std::cout << "   " << tmp->Name << "(+" << tmp->Stats.Def << " def, +" << tmp->Stats.Res << " res)" << '\n';
+            std::cout << "   " << tmp->Name << " (+" << tmp->Stats.Def << " def, +" << tmp->Stats.Res << " res)" << '\n';
         }
     }
 
@@ -77,7 +77,7 @@ int main()
         const Weapon* tmp = dynamic_cast<Weapon*>(protag.getEquippedWeapon(i));        
         
         if(tmp) {
-            std::cout << "   " << tmp->Name << "(" << tmp->minDMG << "-" << tmp->maxDMG << " dmg)" << '\n';
+            std::cout << "   " << tmp->Name << " (" << tmp->minDMG << "-" << tmp->maxDMG << " dmg)" << '\n';
         }
         }
 
@@ -107,7 +107,7 @@ int main()
     auto inv = protag.getBackpackList();
     std::cout << "Inventory: ";
     for(auto it : inv) {
-        std::cout << it << ", ";
+        std::cout << *it << ", ";
     }
 
     std::cout << "\n--------------------- TEST END ---------------------" << endl;
