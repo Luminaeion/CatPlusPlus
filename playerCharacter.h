@@ -109,7 +109,7 @@ private:
     if(CurrentLVL == 2){
         // gain new ability :D
         Abilities.emplace_back("Swipe", 2u, 2u, abilityTarget::ENEMY, 5u, abilityScaler::STR);
-        cout << "- GAINED NEW ABILITY SWIPE -" << endl;
+        std::cout << "- GAINED NEW ABILITY SWIPE -" << endl;
 
         // Stat boosts for lvlups can be done like this:
         /*
@@ -167,25 +167,25 @@ public:
         }
 
     // class name
-    string getClassName() { return pcClass->getClassName(); }
+    string getClassName() const { return pcClass->getClassName(); }
     
     // lvl
-    lvltype getLvl() { return pcClass->getLvl(); }
-    exptype getCurrentEXP() { return pcClass->getCurrentEXP(); }
-    exptype getExptoLvlup() { return pcClass->getExptoLvlup(); }
+    lvltype getLvl() const { return pcClass->getLvl(); }
+    exptype getCurrentEXP() const { return pcClass->getCurrentEXP(); }
+    exptype getExptoLvlup() const { return pcClass->getExptoLvlup(); }
 
     // hp & mp
-    welltype getCurrentHP() { return pcClass->HP->getCurrent(); }
-    welltype getMaxHP() { return pcClass->HP->getMax(); }
+    welltype getCurrentHP() const { return pcClass->HP->getCurrent(); }
+    welltype getMaxHP() const { return pcClass->HP->getMax(); }
 
     // check if character has mp
-    welltype getCurrentMP() { 
+    welltype getCurrentMP() const { 
       if(pcClass->MP)
         return pcClass->MP->getCurrent();
       else
         return 0;
     }
-    welltype getMaxMP() { 
+    welltype getMaxMP() const { 
       if(pcClass->MP)
         return pcClass->MP->getMax(); 
       else
@@ -194,11 +194,11 @@ public:
 
     // getters
     // base stats
-    stattype getBaseStrength() { return pcClass->getBaseStrength(); }
-    stattype getBaseIntellect() { return pcClass->getBaseIntellect(); }
-    stattype getBaseAgility() { return pcClass->getBaseAgility(); }
-    stattype getBaseDefence() { return pcClass->getBaseDefence(); }
-    stattype getBaseResistance() { return pcClass->getBaseResistance(); }
+    stattype getBaseStrength() const { return pcClass->getBaseStrength(); }
+    stattype getBaseIntellect() const { return pcClass->getBaseIntellect(); }
+    stattype getBaseAgility() const { return pcClass->getBaseAgility(); }
+    stattype getBaseDefence() const { return pcClass->getBaseDefence(); }
+    stattype getBaseResistance() const { return pcClass->getBaseResistance(); }
 
     // total stats (stats + buffs)
     stattype getTotalStrength() const {
@@ -302,8 +302,9 @@ public:
         return pcClass->getTotalResistance() + armourRes + weaponRes;
     }
 
-    vector<Ability> getAbilityList() { return pcClass->Abilities; }
-    vector<Buff> getBuffList() { return pcClass->getBuffList(); }
+    const vector<Ability> getAbilityList() const { return pcClass->Abilities; }
+    const vector<Buff> getBuffList() const { return pcClass->getBuffList(); }
+    const vector<Item*> getBackpackList() const { return Backpack; }
 
     EquipmentDelegate* getEquippedArmour(unsigned long long i) const {
         if(!equippedArmour[i]) return nullptr;
