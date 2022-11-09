@@ -30,13 +30,12 @@ int main()
     
     Item* WornCollar = itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK);
     Item* SpikyCollar = itemManager::createArmour("Spiky Collar", coreStats(0, 0, 0, 5, 3), ARMOURSLOT::NECK);
-    Item* MurderMitts = itemManager::createWeapon("Standard Murder Mittens", coreStats(), WEAPONSLOT::MELEE, 1, 4);
+    itemManager::moveToBackpack(itemManager::createWeapon("Standard Murder Mittens", coreStats(), WEAPONSLOT::MELEE, 1, 4), &protag);
     Item* IronClaws = itemManager::createWeapon("Iron Claws", coreStats(), WEAPONSLOT::MELEE, 3, 9);
     
     itemManager::equip(WornCollar, &protag);
     itemManager::equip(SpikyCollar, &protag);
     itemManager::equip(IronClaws, &protag);
-    itemManager::moveToBackpack(MurderMitts, &protag);
 
     for(int i = 0; i < 7; i++) {
         std::cout
@@ -94,9 +93,10 @@ int main()
 
     std::cout << "hp before dmg: " << protag.getCurrentHP() << '\n';
 
-    protag.takeDmg(4);
+    protag.takeDmg(20);
 
     Item* HealPotion = itemManager::createPotion("Small healing potion", 3u, 3u);
+    itemManager::moveToBackpack(HealPotion, &protag);
 
     std::cout << "hp before potion: " << protag.getCurrentHP() << '\n';
 
@@ -104,10 +104,29 @@ int main()
 
     std::cout << "hp after potion: " << protag.getCurrentHP() << '\n';
 
+    {
     auto inv = protag.getBackpackList();
     std::cout << "Inventory: ";
     for(auto it : inv) {
         std::cout << *it << ", ";
+    }
+    }
+
+    std::cout << '\n';
+
+    {
+    itemManager::use(HealPotion, &protag);
+    cout << "Used Potion!" << endl;
+    itemManager::use(HealPotion, &protag);
+    cout << "Used another Potion!" << endl;
+    }
+
+    {
+    auto inv = protag.getBackpackList();
+    std::cout << "Inventory (AFTER USING POTIONS): ";
+    for(auto it : inv) {
+        std::cout << *it << ", ";
+    }
     }
 
     std::cout << "\n--------------------- TEST END ---------------------" << endl;
