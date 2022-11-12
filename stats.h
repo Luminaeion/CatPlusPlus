@@ -20,11 +20,26 @@ public:
     stattype getBaseDefence() { return base.Def; }
     stattype getBaseResistance() { return base.Res; }
 
-    stattype getTotalStrength() { return base.Str + fromBuffs.Str; }
-    stattype getTotalIntellect() { return base.Int + fromBuffs.Int; }
-    stattype getTotalAgility() { return base.Agi + fromBuffs.Agi; }
-    stattype getTotalDefence() { return base.Def + fromBuffs.Def; }
-    stattype getTotalResistance() { return base.Res + fromBuffs.Res; }
+    stattype getTotalStrength() { 
+        int totalStr = base.Str + fromBuffs.Str;
+        if (totalStr < 0) totalStr = 0;
+        return totalStr; }
+    stattype getTotalIntellect() { 
+        int totalInt = base.Int + fromBuffs.Int;
+        if (totalInt < 0) totalInt = 0;
+        return totalInt; }
+    stattype getTotalAgility() { 
+        int totalAgi = base.Agi + fromBuffs.Agi;
+        if (totalAgi < 0) totalAgi = 0;
+        return totalAgi; }
+    stattype getTotalDefence() { 
+        int totalDef = base.Def + fromBuffs.Def;
+        if (totalDef < 0) totalDef = 0;
+        return totalDef; }
+    stattype getTotalResistance() { 
+        int totalRes = base.Res + fromBuffs.Res;
+        if (totalRes < 0) totalRes = 0;
+        return totalRes; }
 
 protected:
     void addNewBuff(Buff b) {

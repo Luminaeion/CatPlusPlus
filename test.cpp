@@ -83,7 +83,7 @@ int main()
         if(i < 1) {
         protag.gainEXP(100u);
         // debuff test
-        Buff agi_debuff("ConeOfShame", 0, 0, 0, 3, 3, 2, true); // name, str, int, agi, def, res, dur, isDebuff(false by default)
+        Buff agi_debuff("ConeOfShame", 0, 0, 3, 3, 0, 3, true); // name, str, int, agi, def, res, dur, isDebuff(false by default)
         protag.applyBuff(agi_debuff);
         // buff test
         Buff int_buff("LittleShit", 5, 8, 1, 1, 1);
