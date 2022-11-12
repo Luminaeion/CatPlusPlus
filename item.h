@@ -1,5 +1,6 @@
 #pragma once
 #include "corestats.h"
+#include "buff.h"
 #include <string>
 #include <typeinfo>
 
@@ -25,7 +26,7 @@ public:
             delete buff;
     }
 private:
-    Potion(string name, welltype hp_heal = 1u, itemCount quant = 1u, Buff* buf = nullptr) : ItemDelegate(name), healAmount(hp_heal), Quantity(quant), buff(buf) {}
+    Potion(std::string name, welltype hp_heal = 1u, itemCount quant = 1u, Buff* buf = nullptr) : ItemDelegate(name), healAmount(hp_heal), Quantity(quant), buff(buf) {}
 
     friend class itemManager;
 };
@@ -40,12 +41,11 @@ private:
 };
 
 enum class ARMOURSLOT { HELMET, CHEST, LEGS, BOOTS, GLOVES, RING1, RING2, NECK, NUM_SLOTS }; // num_slots for making arrays, chill
-
 // this class can't be inherited
 class Armour final : public EquipmentDelegate {
 public: 
     ARMOURSLOT Slot;
-    const char* getType() override { return typeid(*this).name(); }
+    GETTYPE
 
 private:
     // legal way to create armour
@@ -89,8 +89,27 @@ public:
             _data = nullptr;
         }
     }
+    bool checkIfMarkedForDeletion() const { return marked_for_deletion; }
 private:
+    bool marked_for_deletion = false;
     Item(ItemDelegate* item) : _data(item) {}
     friend class itemManager;
     friend class PlayerCharacter;
+
+    friend std::ostream& operator<<(std::ostream& os, const Item& t) {
+    Armour* tmp_cast = dynamic_cast<Armour*>(t._data);
+    if (tmp_cast) {
+      return os << tmp_cast->Name << "(Def: " << tmp_cast->Stats.Def << ", Res: " << tmp_cast->Stats.Res << ')';
+    }
+    Weapon* tmp_cast2 = dynamic_cast<Weapon*>(t._data);
+    if (tmp_cast2) {
+      return  os << tmp_cast2->Name << "(Dmg: " << tmp_cast2->minDMG << '-' << tmp_cast2->maxDMG << ')';
+    }
+    Potion* tmp_cast3 = dynamic_cast<Potion*>(t._data);
+    if (tmp_cast3) {
+      return os << tmp_cast3->Name << '(' << tmp_cast3->Quantity << ')';
+    }
+    return os;
+  }
+
 };
