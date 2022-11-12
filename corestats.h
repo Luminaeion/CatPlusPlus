@@ -37,11 +37,11 @@ struct coreStats {
         this->Res -= rhs.Res;
 
         // prevents wrapping around to a massive number if value < 0
-        if(this->Str > tmp.Str){ this->Str = 0u; }
-        if(this->Int > tmp.Int){ this->Int = 0u; }
-        if(this->Agi > tmp.Agi){ this->Agi = 0u; }
-        if(this->Def > tmp.Def){ this->Def = 0u; }
-        if(this->Res > tmp.Res){ this->Res = 0u; }
+        if(this->Str > tmp.Str) this->Str = 0u;
+        if(this->Int > tmp.Int) this->Int = 0u;
+        if(this->Agi > tmp.Agi) this->Agi = 0u;
+        if(this->Def > tmp.Def) this->Def = 0u;
+        if(this->Res > tmp.Res) this->Res = 0u;
 
         return *this;
     };
