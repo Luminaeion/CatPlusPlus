@@ -9,6 +9,8 @@
 #include "item.h"
 #include <algorithm>
 
+#include "random.h"
+
 class playerCharacterDelegate : public Stats {
 public:
     static const exptype lvl2 = 100u;
@@ -306,16 +308,47 @@ public:
     const vector<Buff> getBuffList() const { return pcClass->getBuffList(); }
     const vector<Item*> getBackpackList() const { return Backpack; }
 
-    EquipmentDelegate* getEquippedArmour(unsigned long long i) const {
+    const Armour* getEquippedArmour(unsigned long long i) const {
         if(!equippedArmour[i]) return nullptr;
-        return (dynamic_cast<Armour*>(equippedArmour[i]->_data));
+        return (dynamic_cast<const Armour*>(equippedArmour[i]->getData()));
     }
 
-    EquipmentDelegate* getEquippedWeapon(unsigned long long i) const { 
+    const Weapon* getEquippedWeapon(unsigned long long i) const { 
         if(!equippedWeapons[i]) return nullptr;
-        return (dynamic_cast<Weapon*>(equippedWeapons[i]->_data));
+        return (dynamic_cast<const Weapon*>(equippedWeapons[i]->getData()));
     }
     
+    const dmgtype meleeAtk() const { 
+        dmgtype tmp_dmg_done = 0;
+
+        const Weapon* equippedWpn = getEquippedWeapon((unsigned long long)WEAPONSLOT::MELEE);
+        if(equippedWpn) {
+            tmp_dmg_done = Random::NTK(equippedWpn->minDMG, equippedWpn->maxDMG);
+        } else {
+            tmp_dmg_done = 1; // unarmed attack
+        }
+
+        // add 1/4 of str as bonus melee dmg
+        tmp_dmg_done += dmgtype(getTotalStrength() / 4.f);
+
+        return tmp_dmg_done;
+     }
+    const dmgtype rangedAtk() const { 
+        dmgtype tmp_dmg_done = 0;
+
+        const Weapon* equippedWpn = getEquippedWeapon((unsigned long long)WEAPONSLOT::RANGED);
+        if(equippedWpn) {
+            tmp_dmg_done = Random::NTK(equippedWpn->minDMG, equippedWpn->maxDMG);
+        } else {
+            tmp_dmg_done = 1; // unarmed attack
+        }
+
+        // add 1/4 of agi as bonus ranged dmg
+        tmp_dmg_done += dmgtype(getTotalAgility() / 4.f);
+
+        return tmp_dmg_done;
+     }
+
     // modifiers
     void gainEXP(exptype amt) { 
         pcClass->gainEXP(amt); 

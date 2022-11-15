@@ -9,6 +9,7 @@
 #include "playerFunctions.h"
 #include "playerCharacter.h"
 #include "itemManager.h"
+#include "enemy.h"
 
 int main()
 {
@@ -64,7 +65,7 @@ int main()
 
     std::cout << "- Armour:\n";
     for(int i = 0; i < (int)ARMOURSLOT::NUM_SLOTS; i++) {
-        const Armour* tmp = dynamic_cast<Armour*>(protag.getEquippedArmour(i));        
+        const Armour* tmp = dynamic_cast<const Armour*>(protag.getEquippedArmour(i));        
         
         if(tmp) {
             std::cout << "   " << tmp->Name << " (+" << tmp->Stats.Def << " def, +" << tmp->Stats.Res << " res)" << '\n';
@@ -73,7 +74,7 @@ int main()
 
     std::cout << "- Weapons:\n";
     for(int i = 0; i < (int)WEAPONSLOT::NUM_SLOTS; i++) {
-        const Weapon* tmp = dynamic_cast<Weapon*>(protag.getEquippedWeapon(i));        
+        const Weapon* tmp = dynamic_cast<const Weapon*>(protag.getEquippedWeapon(i));        
         
         if(tmp) {
             std::cout << "   " << tmp->Name << " (" << tmp->minDMG << "-" << tmp->maxDMG << " dmg)" << '\n';
@@ -128,8 +129,22 @@ int main()
         std::cout << *it << ", ";
     }
     }
+    
+    std::cout << "\n--------------------- BATTLE TEST ---------------------" << endl;
 
-    std::cout << "\n--------------------- TEST END ---------------------" << endl;
+    Enemy ballOyarn(10, 2, 4);
+
+    cout << "Enemy Ball of Yarn has " << ballOyarn.HP.getCurrent() << "/" << ballOyarn.HP.getMax() << " hp. \n";
+    
+    while(ballOyarn.HP.getCurrent() > 0 && protag.getCurrentHP() > 0) {
+        ballOyarn.HP.reduceCurrent(protag.meleeAtk());
+        protag.takeDmg(ballOyarn.Attack());
+        cout << "Enemy Ball of Yarn has " << ballOyarn.HP.getCurrent() << " hp left. The cat has " << protag.getCurrentHP() << " hp left.\n";
+    }
+
+    std::cout << "\n--------------------- BATTLE TEST END ---------------------" << endl;
+
+    std::cout << "\n--------------------- GENERAL TEST END ---------------------" << endl;
 
     // Test function to make player inputs lowercase
     std::cout << "What colour is your fur?" << endl;
