@@ -130,9 +130,21 @@ int main()
     }
     }
     
+    std::cout << "\n--------------------- BATTLE TEST ---------------------" << endl;
+
     Enemy ballOyarn(10, 2, 4);
 
-    std::cout << "\n--------------------- TEST END ---------------------" << endl;
+    cout << "Enemy Ball of Yarn has " << ballOyarn.HP.getCurrent() << "/" << ballOyarn.HP.getMax() << " hp. \n";
+    
+    while(ballOyarn.HP.getCurrent() > 0 && protag.getCurrentHP() > 0) {
+        ballOyarn.HP.reduceCurrent(protag.meleeAtk());
+        protag.takeDmg(ballOyarn.Attack());
+        cout << "Enemy Ball of Yarn has " << ballOyarn.HP.getCurrent() << " hp left. The cat has " << protag.getCurrentHP() << " hp left.\n";
+    }
+
+    std::cout << "\n--------------------- BATTLE TEST END ---------------------" << endl;
+
+    std::cout << "\n--------------------- GENERAL TEST END ---------------------" << endl;
 
     // Test function to make player inputs lowercase
     std::cout << "What colour is your fur?" << endl;
