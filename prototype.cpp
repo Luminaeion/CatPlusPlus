@@ -14,7 +14,10 @@ int main() {
 
     DEFAULTGEAR
 
+    CHARACTERINFO
+
     std::cout << "\n--------------------- PROTOTYPE END ---------------------";
+    _getch();
 
     return 0;
 }
