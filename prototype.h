@@ -12,14 +12,18 @@
 #include "itemManager.h"
 #include "enemy.h"
 
+
 // Create character
 #define CREATECHARACTER playerCharacter protag(new Cat());
+
 
 // Create and equip standard gear
 #define DEFAULTGEAR itemManager::equip(itemManager::createWeapon("Standard Murder Mittens", coreStats(), WEAPONSLOT::MELEE, 1, 4), &protag);\
 itemManager::equip(itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK), &protag);
 
+
 #define CHARACTERINFO \
+    std::cout << "\n--------------------- CHARACTER INFORMATION: ---------------------\n";\
     std::cout\
     << protag.getClassName()\
     << " - lvl  " << protag.getLvl() << '\n'\
@@ -54,5 +58,124 @@ itemManager::equip(itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2
         \
         if(tmp) {\
             std::cout << "   " << tmp->Name << " (" << tmp->minDMG << "-" << tmp->maxDMG << " dmg)" << '\n';\
+        }\
+    }\
+    std::cout << "\n------------------------------------------------------------------\n\n";
+
+
+#define TUTORIALCHOICE \
+    std::cout << "Here is a brief introduction to how this game functions.\n";\
+    std::cout << "You encounter a *menacing* ball of yarn.\n";\
+    retry:\
+    std::cout << "What will you do?\n";\
+    std::cout << "[ look / paw / leave ]\n";\
+    std::cout << "Type one of these options and hit enter.\n";\
+    string tutorialChoice = playerChoice();\
+    \
+    if(tutorialChoice == "look")\
+    {\
+        std::cout << "You look at the ball of yarn sitting in front of you on the floor. Smells like wool.\n";\
+        goto retry;\
+    } else if(tutorialChoice == "paw")\
+    {\
+        std::cout << "You paw at the yarn. It rolls over and stops.\n";\
+        protag.gainEXP(2u);\
+        std::cout << "You gain 2 exp.\n";\
+    } else if(tutorialChoice == "leave")\
+    {\
+        std::cout << "You decide to walk away. 'The yarn may live another day,' you think to yourself.\n";\
+    } else {\
+        std::cout << "Input not recognised. Please try again.\n";\
+        goto retry;\
+    }
+
+
+#define RANDOMENCOUNTER int randomEvent;\
+    int encounterNum = 0;\
+    repeat:\
+    std::cout << "You wander around but come across nothing of interest. \n Keep wandering? [yes/no]\n";\
+    string wanderOpt = playerChoice();\
+    if(wanderOpt == "yes"){\
+        int randomEvent;\
+        srand((unsigned)time(0));\
+        int rnum = (rand()%10) + 1;\
+        int pnum = (rand()%10) + 1;\
+        if(rnum == pnum){\
+            forceEncounter:\
+            switch(rnum){\
+                case 1:\
+                case 2:\
+                    {\
+                        std::cout << "You find a <food item> that looks particularly delicious. \n Pick it up? [yes/no]\n";\
+                        string playerAction = playerChoice();\
+                        if(playerAction == "yes"){\
+                            std::cout << "You pick it up.\n";\
+                            std::cout << "Obtained <food item>!\n";\
+                        } else if(playerAction == "no") {\
+                            std::cout << "You don't like this particular <food item>. You decide to leave it where it is.\n";\
+                        }\
+                    }\
+                    break;\
+                case 3:\
+                case 4:\
+                    {\
+                        std::cout << "You find an <item>. It might be useful. \n Pick it up? [yes/no]\n";\
+                        string playerAction = playerChoice();\
+                        if(playerAction == "yes"){\
+                            std::cout << "You pick the <item> up.\n";\
+                            std::cout << "Obtained <item>!\n";\
+                        } else if(playerAction == "no"){\
+                            std::cout << "You ignore the <item> and walk away.\n";\
+                        }\
+                    }\
+                    break;\
+                case 5:\
+                case 6:\
+                    {\
+                        std::cout << "An <enemy> appears! They haven't noticed you yet. \n What will you do? [run/fight]\n";\
+                        string playerAction = playerChoice();\
+                        if(playerAction == "run"){\
+                            std::cout << "You flee before you're noticed.\n";\
+                            std::cout << "Escaped safely.\n";\
+                        } else if (playerAction == "fight"){\
+                            std::cout << "You take the <enemy> by surprise!\n";\
+                        }\
+                    }\
+                    break;\
+                case 7:\
+                case 8:\
+                    {\
+                        std::cout << "You find an <item>. It might be useful. \n Pick it up? [yes/no]\n";\
+                        string playerAction = playerChoice();\
+                        if(playerAction == "yes"){\
+                            std::cout << "You pick the <item> up.\n";\
+                            std::cout << "Obtained <item>!\n";\
+                        } else if(playerAction == "no"){\
+                            std::cout << "You decide to leave the <item> where it is.\n";\
+                        }\
+                    }\
+                    break;\
+                case 9:\
+                case 10:\
+                    {\
+                        std::cout << "You find an <item>. It might be useful. \n Pick it up? [yes/no]\n";\
+                        string playerAction = playerChoice();\
+                        if(playerAction == "yes"){\
+                            std::cout << "You pick the <item> up.\n";\
+                            std::cout << "Obtained <item>!\n";\
+                        } else if(playerAction == "no"){\
+                            std::cout << "You decide to leave the <item> where it is.\n";\
+                        }\
+                    }\
+                    break;\
+            }\
+        } else {\
+            if(encounterNum >= 4){\
+                rnum == pnum;\
+                goto forceEncounter;\
+            } else {\
+                encounterNum++;\
+                goto repeat;\
+            }\
         }\
     }

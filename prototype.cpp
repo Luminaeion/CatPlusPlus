@@ -16,6 +16,8 @@ int main() {
 
     CHARACTERINFO
 
+    TUTORIALCHOICE
+
     std::cout << "\n--------------------- PROTOTYPE END ---------------------";
     _getch();
 
