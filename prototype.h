@@ -22,6 +22,7 @@
 itemManager::equip(itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK), &protag);
 
 
+#pragma region CHARACTERINFO
 #define CHARACTERINFO \
     std::cout << "\n--------------------- CHARACTER INFORMATION: ---------------------\n";\
     std::cout\
@@ -61,15 +62,17 @@ itemManager::equip(itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2
         }\
     }\
     std::cout << "\n------------------------------------------------------------------\n\n";
+#pragma endregion
 
 
+#pragma region TUTORIAL
 #define TUTORIALCHOICE \
     std::cout << "Here is a brief introduction to how this game functions.\n";\
     std::cout << "You encounter a *menacing* ball of yarn.\n";\
     retry:\
     std::cout << "What will you do?\n";\
     std::cout << "[ look / paw / leave ]\n";\
-    std::cout << "Type one of these options and hit enter.\n";\
+    std::cout << "(Type one of these options and hit enter.)\n";\
     string tutorialChoice = playerChoice();\
     \
     if(tutorialChoice == "look")\
@@ -88,8 +91,10 @@ itemManager::equip(itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2
         std::cout << "Input not recognised. Please try again.\n";\
         goto retry;\
     }
+#pragma endregion
 
 
+#pragma region EXPLORATION
 #define RANDOMENCOUNTER int randomEvent;\
     int encounterNum = 0;\
     repeat:\
@@ -132,7 +137,7 @@ itemManager::equip(itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2
                 case 5:\
                 case 6:\
                     {\
-                        std::cout << "An <enemy> appears! They haven't noticed you yet. \n What will you do? [run/fight]\n";\
+                        std::cout << "An <enemy> appears! They haven't noticed you yet. \n What will you do? [run / fight]\n";\
                         string playerAction = playerChoice();\
                         if(playerAction == "run"){\
                             std::cout << "You flee before you're noticed.\n";\
@@ -179,3 +184,4 @@ itemManager::equip(itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2
             }\
         }\
     }
+#pragma endregion
