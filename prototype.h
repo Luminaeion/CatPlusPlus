@@ -185,3 +185,38 @@ itemManager::equip(itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2
         }\
     }
 #pragma endregion
+
+
+#pragma region EXPLORATION
+#define EXPLORATION bool wander = false;\
+    \
+    exploration:\
+    std::cout << "What would you like to do next?\n";\
+    std::cout << "[ look around / wander / check stats ]\n";\
+    string playerInput = longInput();\
+    \
+    if(playerInput == "wander"){\
+        wander = true;\
+        goto wander;\
+    } else if (playerInput == "look around") {\
+        std::cout << "This is a placeholder. :)\n";\
+        goto exploration;\
+    } else if (playerInput == "check stats") {\
+        std::cout << "You sit down and examine yourself.\n";\
+        CHARACTERINFO\
+        std::cout << "Finished with your brief moment of reflection, you get up, ready to continue onward.\n";\
+        goto exploration;\
+    } else {\
+        std::cout << "Input not recognised. Please try again.\n";\
+        goto exploration;\
+    }\
+    \
+    wander:\
+    while(wander){\
+        RANDOMENCOUNTER\
+        else if(wanderOpt == "no"){\
+            wander = false;\
+            goto exploration;\
+        }\
+    }
+#pragma endregion
