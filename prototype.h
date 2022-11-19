@@ -93,18 +93,20 @@ itemManager::equip(itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2
     }
 #pragma endregion
 
+// get a location to start with
+string currentLocation = setLocation();
 
-#pragma region EXPLORATION
+#pragma region WANDERING
 #define RANDOMENCOUNTER int randomEvent;\
     int encounterNum = 0;\
     repeat:\
-    std::cout << "You wander around but come across nothing of interest. \n Keep wandering? [yes/no]\n";\
+    std::cout << "You wander around but come across nothing of interest. \n Keep wandering? [yes / no]\n";\
     string wanderOpt = playerChoice();\
     if(wanderOpt == "yes"){\
         int randomEvent;\
         srand((unsigned)time(0));\
-        int rnum = (rand()%10) + 1;\
-        int pnum = (rand()%10) + 1;\
+        int rnum = rng(10);\
+        int pnum = rng(10);\
         if(rnum == pnum){\
             forceEncounter:\
             switch(rnum){\
@@ -197,9 +199,11 @@ itemManager::equip(itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2
     \
     if(playerInput == "wander"){\
         wander = true;\
+        string currentLocation = setLocation();\
         goto wander;\
     } else if (playerInput == "look around") {\
-        std::cout << "This is a placeholder. :)\n";\
+        std::cout << "You look around. You see a " << currentLocation << ".\n";\
+        DISCOVERY\
         goto exploration;\
     } else if (playerInput == "check stats") {\
         std::cout << "You sit down and examine yourself.\n";\
@@ -219,4 +223,24 @@ itemManager::equip(itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2
             goto exploration;\
         }\
     }
+#pragma endregion
+
+
+#pragma region DISCOVERYBOOL
+#define CHECKIFANYTHINGFOUND bool encounteredSomething = false;\
+    int rndNum = rng(5);\
+    int rndNum2 = rng(5);\
+    if(rndNum == rndNum2) { encounteredSomething = true; }
+#pragma endregion
+
+
+#pragma region DISCOVERY
+#define DISCOVERY \
+CHECKIFANYTHINGFOUND \
+if(encounteredSomething){\
+    cout << "HELLO YOU APPARENTLY FOUND SOME STUFF, NICE\n";\
+    /* Generate whatever was found */\
+} else {\
+    cout << "You don't find anything of interest in the area.\n";\
+}
 #pragma endregion
