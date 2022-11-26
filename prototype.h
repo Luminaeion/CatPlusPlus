@@ -12,10 +12,8 @@
 #include "itemManager.h"
 #include "enemy.h"
 
-
 // Create character
 #define CREATECHARACTER playerCharacter protag(new Cat());
-
 
 // Create and equip standard gear
 #define DEFAULTGEAR itemManager::equip(itemManager::createWeapon("Standard Murder Mittens", coreStats(), WEAPONSLOT::MELEE, 1, 4), &protag);\
@@ -95,6 +93,8 @@ itemManager::equip(itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2
 
 // get a location to start with
 string currentLocation = setLocation();
+
+// TO-DO: UPDATE WANDERING -> REPLACE PLACEHOLDERS
 
 #pragma region WANDERING
 #define RANDOMENCOUNTER int randomEvent;\
@@ -233,13 +233,232 @@ string currentLocation = setLocation();
     if(rndNum == rndNum2) { encounteredSomething = true; }
 #pragma endregion
 
+/*
+#pragma region DISCOVEREDTHING
+Item* fetchGeneratedThing(int genRes, Item* generatedItem) {
+
+switch(genRes) {
+    case 0: // items 0-3 
+        {
+        Item* HealPotion = itemManager::createPotion("TESTITEM_POTION", 3u, 3u);
+        generatedItem = HealPotion;
+        break;
+        }
+    case 1:
+        {
+        Item* HealPotion1 = itemManager::createPotion("TESTITEM_POTION", 3u, 3u);
+        generatedItem = HealPotion1;
+        break;
+        }
+    case 2:
+        {
+        Item* HealPotion2 = itemManager::createPotion("TESTITEM_POTION", 3u, 3u);
+        generatedItem = HealPotion2;
+        break;
+        }
+    case 3:
+        {
+        Item* HealPotion3 = itemManager::createPotion("TESTITEM_POTION", 3u, 3u);
+        generatedItem = HealPotion3;
+        break;
+        }
+    case 4: // weapons 8-11
+        {
+        Item* MurderMitts = itemManager::createWeapon("TESTITEM_WEAPON", coreStats(), WEAPONSLOT::MELEE, 1, 4);
+        generatedItem = MurderMitts;
+        break;
+        }
+    case 5:
+        {
+        Item* MurderMitts1 = itemManager::createWeapon("TESTITEM_WEAPON", coreStats(), WEAPONSLOT::MELEE, 1, 4);
+        generatedItem = MurderMitts1;
+        break;
+        }
+    case 6:
+        {
+        Item* MurderMitts2 = itemManager::createWeapon("TESTITEM_WEAPON", coreStats(), WEAPONSLOT::MELEE, 1, 4);
+        generatedItem = MurderMitts2;
+        break;
+        }
+    case 7:
+        {
+        Item* MurderMitts3 = itemManager::createWeapon("TESTITEM_WEAPON", coreStats(), WEAPONSLOT::MELEE, 1, 4);
+        generatedItem = MurderMitts3;
+        break;
+        }
+    case 8: // armour 12-15
+        {
+        Item* WornCollar = itemManager::createArmour("TESTITEM_ARMOUR", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK);
+        generatedItem = WornCollar;
+        break;
+        }
+    case 9:
+        {
+        Item* WornCollar2 = itemManager::createArmour("TESTITEM_ARMOUR", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK);
+        generatedItem = WornCollar2;
+        break;
+        }
+    case 10:
+        {
+        Item* WornCollar3 = itemManager::createArmour("TESTITEM_ARMOUR", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK);
+        generatedItem = WornCollar3;
+        break;
+        }
+    case 11:
+        {
+        Item* WornCollar4 = itemManager::createArmour("TESTITEM_ARMOUR", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK);
+        generatedItem = WornCollar4;
+        break;
+        }
+    /*case 12: // enemies 4-7
+        {
+        Enemy ballOyarn(10, 2, 4);
+        cout << "Enemy encounter.\n";
+        break;
+        }
+    case 13:
+        {
+        Enemy ballOyarn1(10, 2, 4);
+        cout << "Enemy encounter.\n";
+        break;
+        }
+    case 14:
+        {
+        Enemy ballOyarn2(10, 2, 4);
+        cout << "Enemy encounter.\n";
+        break;
+        }
+    case 15:
+        {
+        Enemy ballOyarn3(10, 2, 4);
+        cout << "Enemy encounter.\n";
+        break;
+        }
+}
+return generatedItem;
+}
+#pragma endregion
+*/
+
+#pragma region RANDOMFOUNDTHING
+int generateRandomThing() {
+    int thingType = rand()%3;
+    int thingNum = rand()%4;
+    int thingArr[4][4] = {{0,1,2,3}, {4,5,6,7}, {8,9,10,11}, {12,13,14,15}};
+    int genRes = thingArr[thingType][thingNum];
+    // output test
+    cout << "This was generated: " << thingArr[thingType][thingNum] << "(from pos" << thingType << "," << thingNum << ")\n";
+    // fetch generated item
+    Item* generatedItem;
+    switch(genRes) {
+    case 0: // items 0-3 
+        {
+        Item* HealPotion = itemManager::createPotion("TESTITEM_POTION1", 3u, 3u);
+        generatedItem = HealPotion;
+        break;
+        }
+    case 1:
+        {
+        Item* HealPotion1 = itemManager::createPotion("TESTITEM_POTION2", 3u, 3u);
+        generatedItem = HealPotion1;
+        break;
+        }
+    case 2:
+        {
+        Item* HealPotion2 = itemManager::createPotion("TESTITEM_POTION3", 3u, 3u);
+        generatedItem = HealPotion2;
+        break;
+        }
+    case 3:
+        {
+        Item* HealPotion3 = itemManager::createPotion("TESTITEM_POTION4", 3u, 3u);
+        generatedItem = HealPotion3;
+        break;
+        }
+    case 4: // weapons 8-11
+        {
+        Item* MurderMitts = itemManager::createWeapon("TESTITEM_WEAPON1", coreStats(), WEAPONSLOT::MELEE, 1, 4);
+        generatedItem = MurderMitts;
+        break;
+        }
+    case 5:
+        {
+        Item* MurderMitts1 = itemManager::createWeapon("TESTITEM_WEAPON2", coreStats(), WEAPONSLOT::MELEE, 1, 4);
+        generatedItem = MurderMitts1;
+        break;
+        }
+    case 6:
+        {
+        Item* MurderMitts2 = itemManager::createWeapon("TESTITEM_WEAPON3", coreStats(), WEAPONSLOT::MELEE, 1, 4);
+        generatedItem = MurderMitts2;
+        break;
+        }
+    case 7:
+        {
+        Item* MurderMitts3 = itemManager::createWeapon("TESTITEM_WEAPON4", coreStats(), WEAPONSLOT::MELEE, 1, 4);
+        generatedItem = MurderMitts3;
+        break;
+        }
+    case 8: // armour 12-15
+        {
+        Item* WornCollar = itemManager::createArmour("TESTITEM_ARMOUR1", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK);
+        generatedItem = WornCollar;
+        break;
+        }
+    case 9:
+        {
+        Item* WornCollar2 = itemManager::createArmour("TESTITEM_ARMOUR2", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK);
+        generatedItem = WornCollar2;
+        break;
+        }
+    case 10:
+        {
+        Item* WornCollar3 = itemManager::createArmour("TESTITEM_ARMOUR3", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK);
+        generatedItem = WornCollar3;
+        break;
+        }
+    case 11:
+        {
+        Item* WornCollar4 = itemManager::createArmour("TESTITEM_ARMOUR4", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK);
+        generatedItem = WornCollar4;
+        break;
+        }
+    /*case 12: // enemies 4-7
+        {
+        Enemy ballOyarn(10, 2, 4);
+        cout << "Enemy encounter.\n";
+        break;
+        }
+    case 13:
+        {
+        Enemy ballOyarn1(10, 2, 4);
+        cout << "Enemy encounter.\n";
+        break;
+        }
+    case 14:
+        {
+        Enemy ballOyarn2(10, 2, 4);
+        cout << "Enemy encounter.\n";
+        break;
+        }
+    case 15:
+        {
+        Enemy ballOyarn3(10, 2, 4);
+        cout << "Enemy encounter.\n";
+        break;
+        }*/
+    }
+    /*fetchGeneratedThing(genRes, generatedItem);*/
+    cout << "Discovered " << *generatedItem << ".\n";
+}
+#pragma endregion
 
 #pragma region DISCOVERY
 #define DISCOVERY \
 CHECKIFANYTHINGFOUND \
 if(encounteredSomething){\
     cout << "HELLO YOU APPARENTLY FOUND SOME STUFF, NICE\n";\
-    /* Generate whatever was found */\
+    generateRandomThing();\
 } else {\
     cout << "You don't find anything of interest in the area.\n";\
 }
