@@ -59,6 +59,7 @@ itemManager::equip(itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2
             std::cout << "   " << tmp->Name << " (" << tmp->minDMG << "-" << tmp->maxDMG << " dmg)" << '\n';\
         }\
     }\
+    INVENTORY\
     std::cout << "\n------------------------------------------------------------------\n\n";
 #pragma endregion
 
@@ -113,26 +114,28 @@ string currentLocation = setLocation();
                 case 1:\
                 case 2:\
                     {\
-                        std::cout << "You find a <food item> that looks particularly delicious. \n Pick it up? [yes/no]\n";\
+                        std::cout << "You find a Fish Biscuit that looks particularly delicious. \n Pick it up? [ yes / no ]\n";\
                         string playerAction = playerChoice();\
                         if(playerAction == "yes"){\
                             std::cout << "You pick it up.\n";\
-                            std::cout << "Obtained <food item>!\n";\
+                            itemManager::moveToBackpack(itemManager::createPotion("Fish Biscuit", 1u, 2u), &protag);\
+                            std::cout << "Obtained Fish Biscuit!\n";\
                         } else if(playerAction == "no") {\
-                            std::cout << "You don't like this particular <food item>. You decide to leave it where it is.\n";\
+                            std::cout << "You don't like this particular Fish Biscuit. You decide to leave it where it is.\n";\
                         }\
                     }\
                     break;\
                 case 3:\
                 case 4:\
                     {\
-                        std::cout << "You find an <item>. It might be useful. \n Pick it up? [yes/no]\n";\
+                        std::cout << "You find a Small Healing Potion. It might be useful. \n Pick it up? [ Yes / No ]\n";\
                         string playerAction = playerChoice();\
                         if(playerAction == "yes"){\
-                            std::cout << "You pick the <item> up.\n";\
-                            std::cout << "Obtained <item>!\n";\
+                            std::cout << "You pick the Small Healing Potion up.\n";\
+                            itemManager::moveToBackpack(itemManager::createPotion("Small Healing Potion", 1u, 3u), &protag);\
+                            std::cout << "Obtained Small Healing Potion!\n";\
                         } else if(playerAction == "no"){\
-                            std::cout << "You ignore the <item> and walk away.\n";\
+                            std::cout << "You ignore the Small Healing Potion and walk away.\n";\
                         }\
                     }\
                     break;\
@@ -152,26 +155,28 @@ string currentLocation = setLocation();
                 case 7:\
                 case 8:\
                     {\
-                        std::cout << "You find an <item>. It might be useful. \n Pick it up? [yes/no]\n";\
+                        std::cout << "You find a Cool Stick. It might be useful. \n Pick it up? [ Yes / No ]\n";\
                         string playerAction = playerChoice();\
                         if(playerAction == "yes"){\
-                            std::cout << "You pick the <item> up.\n";\
-                            std::cout << "Obtained <item>!\n";\
+                            std::cout << "You take the Cool Stick with you.\n";\
+                            itemManager::moveToBackpack(itemManager::createWeapon("Cool Stick", coreStats(), WEAPONSLOT::MELEE, 1, 2), &protag);\
+                            std::cout << "Obtained Cool Stick!\n";\
                         } else if(playerAction == "no"){\
-                            std::cout << "You decide to leave the <item> where it is.\n";\
+                            std::cout << "You decide to leave the Cool Stick where it is.\n";\
                         }\
                     }\
                     break;\
                 case 9:\
                 case 10:\
                     {\
-                        std::cout << "You find an <item>. It might be useful. \n Pick it up? [yes/no]\n";\
+                        std::cout << "You find a Tophat. \n Do you want to bring it with you? [ yes / no ]\n";\
                         string playerAction = playerChoice();\
                         if(playerAction == "yes"){\
-                            std::cout << "You pick the <item> up.\n";\
-                            std::cout << "Obtained <item>!\n";\
+                            std::cout << "You plop the Tophat on your head. It makes you feel dapper.\n";\
+                            itemManager::equip(itemManager::createArmour("Tophat", coreStats(1, 3, 0, 1, 0), ARMOURSLOT::HELMET), &protag);\
+                            std::cout << "Obtained Tophat!\n";\
                         } else if(playerAction == "no"){\
-                            std::cout << "You decide to leave the <item> where it is.\n";\
+                            std::cout << "You decide to leave the Tophat where it is. You reckon you're dapper enough already.\n";\
                         }\
                     }\
                     break;\
@@ -232,113 +237,6 @@ string currentLocation = setLocation();
     int rndNum2 = rng(5);\
     if(rndNum == rndNum2) { encounteredSomething = true; }
 #pragma endregion
-
-/*
-#pragma region DISCOVEREDTHING
-Item* fetchGeneratedThing(int genRes, Item* generatedItem) {
-
-switch(genRes) {
-    case 0: // items 0-3 
-        {
-        Item* HealPotion = itemManager::createPotion("TESTITEM_POTION", 3u, 3u);
-        generatedItem = HealPotion;
-        break;
-        }
-    case 1:
-        {
-        Item* HealPotion1 = itemManager::createPotion("TESTITEM_POTION", 3u, 3u);
-        generatedItem = HealPotion1;
-        break;
-        }
-    case 2:
-        {
-        Item* HealPotion2 = itemManager::createPotion("TESTITEM_POTION", 3u, 3u);
-        generatedItem = HealPotion2;
-        break;
-        }
-    case 3:
-        {
-        Item* HealPotion3 = itemManager::createPotion("TESTITEM_POTION", 3u, 3u);
-        generatedItem = HealPotion3;
-        break;
-        }
-    case 4: // weapons 8-11
-        {
-        Item* MurderMitts = itemManager::createWeapon("TESTITEM_WEAPON", coreStats(), WEAPONSLOT::MELEE, 1, 4);
-        generatedItem = MurderMitts;
-        break;
-        }
-    case 5:
-        {
-        Item* MurderMitts1 = itemManager::createWeapon("TESTITEM_WEAPON", coreStats(), WEAPONSLOT::MELEE, 1, 4);
-        generatedItem = MurderMitts1;
-        break;
-        }
-    case 6:
-        {
-        Item* MurderMitts2 = itemManager::createWeapon("TESTITEM_WEAPON", coreStats(), WEAPONSLOT::MELEE, 1, 4);
-        generatedItem = MurderMitts2;
-        break;
-        }
-    case 7:
-        {
-        Item* MurderMitts3 = itemManager::createWeapon("TESTITEM_WEAPON", coreStats(), WEAPONSLOT::MELEE, 1, 4);
-        generatedItem = MurderMitts3;
-        break;
-        }
-    case 8: // armour 12-15
-        {
-        Item* WornCollar = itemManager::createArmour("TESTITEM_ARMOUR", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK);
-        generatedItem = WornCollar;
-        break;
-        }
-    case 9:
-        {
-        Item* WornCollar2 = itemManager::createArmour("TESTITEM_ARMOUR", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK);
-        generatedItem = WornCollar2;
-        break;
-        }
-    case 10:
-        {
-        Item* WornCollar3 = itemManager::createArmour("TESTITEM_ARMOUR", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK);
-        generatedItem = WornCollar3;
-        break;
-        }
-    case 11:
-        {
-        Item* WornCollar4 = itemManager::createArmour("TESTITEM_ARMOUR", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK);
-        generatedItem = WornCollar4;
-        break;
-        }
-    /*case 12: // enemies 4-7
-        {
-        Enemy ballOyarn(10, 2, 4);
-        cout << "Enemy encounter.\n";
-        break;
-        }
-    case 13:
-        {
-        Enemy ballOyarn1(10, 2, 4);
-        cout << "Enemy encounter.\n";
-        break;
-        }
-    case 14:
-        {
-        Enemy ballOyarn2(10, 2, 4);
-        cout << "Enemy encounter.\n";
-        break;
-        }
-    case 15:
-        {
-        Enemy ballOyarn3(10, 2, 4);
-        cout << "Enemy encounter.\n";
-        break;
-        }
-}
-return generatedItem;
-}
-#pragma endregion
-*/
 
 #pragma region RANDOMFOUNDTHING
 int generateRandomThing() {
@@ -463,3 +361,9 @@ if(encounteredSomething){\
     cout << "You don't find anything of interest in the area.\n";\
 }
 #pragma endregion
+
+
+#define INVENTORY \
+auto inv = protag.getBackpackList();\
+std::cout << "Inventory: ";\
+for(auto it : inv) { std::cout << *it << ", "; }
