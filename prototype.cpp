@@ -1,10 +1,5 @@
 #include "prototype.h"
 
-
-Player* MainCharacter = nullptr;
-Fightable* CurrentEnemy = nullptr;
-int victoryCount = 0;
-
 int main() {
     
     std::cout << "\n--------------------- PROTOTYPE START ---------------------\n";

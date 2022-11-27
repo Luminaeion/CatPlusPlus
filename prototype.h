@@ -354,6 +354,13 @@ for(auto it : inv) { std::cout << *it << ", "; }
 
 #pragma region BATTLE
 // BATTLE STUFF
+struct Player {
+    Player(playerCharacterDelegate* charclass) : us(charclass) {}
+    Player() = delete;
+    bool isAlive() { return (us.getCurrentHP() > 0); }
+    playerCharacter us;
+};
+
 struct Fightable {
     Fightable(int hp, int min, int max) : enemy(hp, min, max) {
         xpworth = (hp + min + max) * 2;
@@ -364,12 +371,9 @@ struct Fightable {
     Fightable() = delete;
 };
 
-struct Player {
-    Player(playerCharacterDelegate* charclass) : us(charclass) {}
-    Player() = delete;
-    bool isAlive() { return (us.getCurrentHP() > 0); }
-    playerCharacter us;
-};
+Player* MainCharacter = nullptr;
+Fightable* CurrentEnemy = nullptr;
+int victoryCount = 0;
 
 void newEnemy(Fightable* in_out, const Player* base_calc) {
     if(!base_calc)
