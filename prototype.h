@@ -12,12 +12,17 @@
 #include "itemManager.h"
 #include "enemy.h"
 
+#pragma region CHARACTERCREATION
 // Create character
 #define CREATECHARACTER playerCharacter protag(new Cat());
+#pragma endregion
 
+
+#pragma region DEFAULTGEAR
 // Create and equip standard gear
 #define DEFAULTGEAR itemManager::equip(itemManager::createWeapon("Standard Murder Mittens", coreStats(), WEAPONSLOT::MELEE, 1, 4), &protag);\
 itemManager::equip(itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK), &protag);
+#pragma endregion
 
 
 #pragma region CHARACTERINFO
@@ -95,7 +100,6 @@ itemManager::equip(itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2
 // get a location to start with
 string currentLocation = setLocation();
 
-// TO-DO: UPDATE WANDERING -> REPLACE PLACEHOLDERS
 
 #pragma region WANDERING
 #define RANDOMENCOUNTER int randomEvent;\
@@ -238,6 +242,7 @@ string currentLocation = setLocation();
     if(rndNum == rndNum2) { encounteredSomething = true; }
 #pragma endregion
 
+
 #pragma region RANDOMFOUNDTHING
 int generateRandomThing() {
     int thingType = rand()%3;
@@ -321,35 +326,11 @@ int generateRandomThing() {
         generatedItem = WornCollar4;
         break;
         }
-    /*case 12: // enemies 4-7
-        {
-        Enemy ballOyarn(10, 2, 4);
-        cout << "Enemy encounter.\n";
-        break;
-        }
-    case 13:
-        {
-        Enemy ballOyarn1(10, 2, 4);
-        cout << "Enemy encounter.\n";
-        break;
-        }
-    case 14:
-        {
-        Enemy ballOyarn2(10, 2, 4);
-        cout << "Enemy encounter.\n";
-        break;
-        }
-    case 15:
-        {
-        Enemy ballOyarn3(10, 2, 4);
-        cout << "Enemy encounter.\n";
-        break;
-        }*/
     }
-    /*fetchGeneratedThing(genRes, generatedItem);*/
     cout << "Discovered " << *generatedItem << ".\n";
 }
 #pragma endregion
+
 
 #pragma region DISCOVERY
 #define DISCOVERY \
@@ -363,7 +344,46 @@ if(encounteredSomething){\
 #pragma endregion
 
 
+#pragma region INVENTORY
 #define INVENTORY \
 auto inv = protag.getBackpackList();\
 std::cout << "Inventory: ";\
 for(auto it : inv) { std::cout << *it << ", "; }
+#pragma endregion
+
+
+#pragma region BATTLE
+// BATTLE STUFF
+struct Fightable {
+    Fightable(int hp, int min, int max) : enemy(hp, min, max) {
+        xpworth = (hp + min + max) * 2;
+    }
+    bool isAlive() { return (enemy.HP.getCurrent() > 0); }
+    Enemy enemy;
+    int xpworth;
+    Fightable() = delete;
+};
+
+struct Player {
+    Player(playerCharacterDelegate* charclass) : us(charclass) {}
+    Player() = delete;
+    bool isAlive() { return (us.getCurrentHP() > 0); }
+    playerCharacter us;
+};
+
+Player* MainCharacter = nullptr;
+Fightable* CurrentEnemy = nullptr;
+
+void enterFight(Player& player1) {
+    if(!CurrentEnemy) {
+        return;
+    }
+
+    while(player1.isAlive() && CurrentEnemy->isAlive()) {
+        cout << "An enemy stands before you, ready to do battle.";
+        cout << "Player health: " << player1.us.getCurrentHP() << "/" << player1.us.getMaxHP() << "\n";
+        cout << "Enemy health: " << CurrentEnemy->enemy.HP.getCurrent() << "/" << CurrentEnemy->enemy.HP.getMax() << "\n";
+        // battle logic here :)
+    };
+};
+#pragma endregion
