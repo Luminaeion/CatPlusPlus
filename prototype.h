@@ -371,19 +371,66 @@ struct Player {
     playerCharacter us;
 };
 
-Player* MainCharacter = nullptr;
-Fightable* CurrentEnemy = nullptr;
+void newEnemy(Fightable* in_out, const Player* base_calc) {
+    if(!base_calc)
+        return;
+    
+    if(in_out) {
+        delete in_out;
+        in_out = nullptr;
+    }
 
+    int lowest_hp = base_calc->us.getLvl() * 2;
+    int max_hp = base_calc->us.getLvl() * 8;
+
+    int lowest_dmg = base_calc->us.getLvl();
+    int highest_dmg = base_calc->us.getLvl() * 2;
+
+    in_out = new Fightable(Random::NTK(lowest_hp, max_hp), lowest_dmg, highest_dmg);
+
+    CurrentEnemy = in_out;
+}
+
+// returns true on win
 void enterFight(Player& player1) {
     if(!CurrentEnemy) {
         return;
     }
 
     while(player1.isAlive() && CurrentEnemy->isAlive()) {
+        system("cls");
         cout << "An enemy stands before you, ready to do battle.";
         cout << "Player health: " << player1.us.getCurrentHP() << "/" << player1.us.getMaxHP() << "\n";
         cout << "Enemy health: " << CurrentEnemy->enemy.HP.getCurrent() << "/" << CurrentEnemy->enemy.HP.getMax() << "\n";
-        // battle logic here :)
-    };
+        retry:
+        cout << "What will you do?\n[ Attack ]\n";
+        string playerAction = playerChoice();
+        if(playerAction == "attack") {
+            cout << "You attack the enemy.\n";
+            CurrentEnemy->enemy.HP.reduceCurrent(player1.us.meleeAtk());
+        } else {
+            cout << "Input not recognised. Try again.";
+            goto retry;
+        }
+
+        if(CurrentEnemy->isAlive()){
+            cout << "The enemy attacks!";
+            player1.us.takeDmg(CurrentEnemy->enemy.Attack());
+        }
+    }
+
+    if(player1.isAlive()) {
+        cout << "You win!\n";
+        cout << "You gain " << CurrentEnemy->xpworth << " exp!\n";
+        player1.us.gainEXP(CurrentEnemy->xpworth);
+        victoryCount++;
+        newEnemy(CurrentEnemy, &player1);
+    } else {
+        cout << "You were defeated!\n";
+        cout << "Total # of enemies defeated: " << victoryCount << "\n";
+        std::cout << "\n------------------------------------------------------------------\n";
+        _getch();
+    }
 };
 #pragma endregion
+
