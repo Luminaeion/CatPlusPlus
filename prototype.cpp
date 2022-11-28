@@ -12,10 +12,14 @@ int main() {
 
     CREATECHARACTER
 
+    newEnemy(CurrentEnemy, MainCharacter);
+
+    position[CurrentEnemy->xpos][CurrentEnemy->ypos] = 'E';
+
     DEFAULTGEAR
 
     CHARACTERINFO
-
+    
     TUTORIALCHOICE
 
     std::cout << "\n------------------------------------------------------------------\n";
@@ -23,8 +27,13 @@ int main() {
     std::cout << "Don't worry, though. You'll always be able to view your options when you're presented with a choice.\n"; 
     std::cout << "Have fun! :)\n";
     std::cout << "------------------------------------------------------------------\n";
-
+    
     EXPLORATION
+    while(wander) { playerWander(*MainCharacter); }
+
+    cout << "Total # of enemies defeated: " << victoryCount << "\n";
+    std::cout << "\n------------------------------------------------------------------\n";
+    _getch();
 
     std::cout << "\n--------------------- PROTOTYPE END ---------------------";
     _getch();
