@@ -93,7 +93,7 @@ protected:
 class Cat : public playerCharacterDelegate {
 public:
     static const welltype BaseHP = (welltype)14;
-    static const stattype BaseStr = (stattype)2;
+    static const stattype BaseStr = (stattype)1;
     static const stattype BaseInt = (stattype)4;
     static const stattype BaseAgi = (stattype)7;
     static const welltype BaseMP = (welltype)10u;
@@ -331,6 +331,8 @@ public:
         // add 1/4 of str as bonus melee dmg
         tmp_dmg_done += dmgtype(getTotalStrength() / 4.f);
 
+        if(tmp_dmg_done < 1) tmp_dmg_done = 1; // make sure player does AT LEAST 1 point of damage always
+
         return tmp_dmg_done;
      }
     const dmgtype rangedAtk() const { 
@@ -345,6 +347,8 @@ public:
 
         // add 1/4 of agi as bonus ranged dmg
         tmp_dmg_done += dmgtype(getTotalAgility() / 4.f);
+
+        if(tmp_dmg_done < 1) tmp_dmg_done = 1; // make sure player does AT LEAST 1 point of damage always
 
         return tmp_dmg_done;
      }

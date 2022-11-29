@@ -40,7 +40,7 @@ protected:
 private:
 };
 
-enum class ARMOURSLOT { HELMET, CHEST, LEGS, BOOTS, GLOVES, RING1, RING2, NECK, NUM_SLOTS }; // num_slots for making arrays, chill
+enum class ARMOURSLOT { HEAD, CHEST, LEGS, FEET, HANDS, RING1, RING2, NECK, NUM_SLOTS }; // num_slots for making arrays, chill
 // this class can't be inherited
 class Armour final : public EquipmentDelegate {
 public: 

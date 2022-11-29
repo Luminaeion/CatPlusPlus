@@ -172,7 +172,7 @@ string currentLocation = setLocation();
                     string playerAction = playerChoice();\
                     if(playerAction == "yes"){\
                         std::cout << "You plop the Tophat on your head. It makes you feel dapper.\n";\
-                        itemManager::equip(itemManager::createArmour("Tophat", coreStats(1, 3, 0, 1, 0), ARMOURSLOT::HELMET), &MainCharacter->us);\
+                        itemManager::equip(itemManager::createArmour("Tophat", coreStats(1, 3, 0, 1, 0), ARMOURSLOT::HEAD), &MainCharacter->us);\
                         std::cout << "Obtained Tophat!\n";\
                     } else if(playerAction == "no"){\
                         std::cout << "You decide to leave the Tophat where it is. You reckon you're dapper enough already.\n";\
@@ -376,6 +376,199 @@ Fightable* CurrentEnemy = nullptr;
 int victoryCount = 0;
 char position[3][3];
 
+// generic drops ¯\_(ツ)_/¯
+Item* dropLoot() {
+    // 8 armour, 2 weapon, 1 potion : 11 total possible types of drops
+    int drop_seed = Random::NTK(1, 100);
+    if (drop_seed < 6) { // = 6% drop chance
+        // chance for better loot ¯\_(ツ)_/¯
+        string name;
+        coreStats local_stats;
+        int magicalPower = Random::NTK(0, 2);
+        switch(magicalPower) {
+            case 0: name = "Helmet";
+                local_stats = coreStats(0,0,0,1,0);
+                break;
+            case 1: 
+                name = "+1 Helmet";
+                local_stats = coreStats(1,1,1,2,1);
+            break;
+            case 2: 
+                name = "+2 Helmet";
+                local_stats = coreStats(2,2,2,3,2);
+            break;
+        }
+        return itemManager::createArmour(name, local_stats, ARMOURSLOT::HEAD);
+    } else if (drop_seed < 12) {
+        string name;
+        coreStats local_stats;
+        int magicalPower = Random::NTK(0, 2);
+        switch(magicalPower) {
+            case 0: name = "Chestplate";
+                local_stats = coreStats(0,0,0,1,0);
+                break;
+            case 1: 
+                name = "+1 Chestplate";
+                local_stats = coreStats(1,1,1,2,1);
+            break;
+            case 2: 
+                name = "+2 Chestplate";
+                local_stats = coreStats(2,2,2,3,2);
+            break;
+        }
+        return itemManager::createArmour(name, local_stats, ARMOURSLOT::CHEST);
+    } else if (drop_seed < 18) {
+        string name;
+        coreStats local_stats;
+        int magicalPower = Random::NTK(0, 2);
+        switch(magicalPower) {
+            case 0: name = "Leg Guards";
+                local_stats = coreStats(0,0,0,1,0);
+                break;
+            case 1: 
+                name = "+1 Leg Guards";
+                local_stats = coreStats(1,1,1,2,1);
+            break;
+            case 2: 
+                name = "+2 Leg Guards";
+                local_stats = coreStats(2,2,2,3,2);
+            break;
+        }
+        return itemManager::createArmour(name, local_stats, ARMOURSLOT::LEGS);
+    } else if (drop_seed < 24) {
+        string name;
+        coreStats local_stats;
+        int magicalPower = Random::NTK(0, 2);
+        switch(magicalPower) {
+            case 0: name = "Boots";
+                local_stats = coreStats(0,0,0,1,0);
+                break;
+            case 1: 
+                name = "+1 Boots";
+                local_stats = coreStats(1,1,1,2,1);
+            break;
+            case 2: 
+                name = "+2 Boots";
+                local_stats = coreStats(2,2,2,3,2);
+            break;
+        }
+        return itemManager::createArmour(name, local_stats, ARMOURSLOT::FEET);
+    } else if (drop_seed < 30) {
+        string name;
+        coreStats local_stats;
+        int magicalPower = Random::NTK(0, 2);
+        switch(magicalPower) {
+            case 0: name = "Gloves";
+                local_stats = coreStats(0,0,0,1,0);
+                break;
+            case 1: 
+                name = "+1 Gloves";
+                local_stats = coreStats(1,1,1,2,1);
+            break;
+            case 2: 
+                name = "+2 Gloves";
+                local_stats = coreStats(2,2,2,3,2);
+            break;
+        }
+        return itemManager::createArmour(name, local_stats, ARMOURSLOT::HANDS);
+    } else if (drop_seed < 36) {
+        string name;
+        coreStats local_stats;
+        int magicalPower = Random::NTK(0, 2);
+        switch(magicalPower) {
+            case 0: name = "Ring";
+                local_stats = coreStats(1,1,1,0,0);
+                break;
+            case 1: 
+                name = "+1 Ring";
+                local_stats = coreStats(2,2,2,1,1);
+            break;
+            case 2: 
+                name = "+2 Ring";
+                local_stats = coreStats(3,3,3,2,2);
+            break;
+        }
+        return itemManager::createArmour(name, local_stats, ARMOURSLOT::RING1);
+    } else if (drop_seed < 42) {
+        string name;
+        coreStats local_stats;
+        int magicalPower = Random::NTK(0, 2);
+        switch(magicalPower) {
+            case 0: name = "Ring";
+                local_stats = coreStats(1,1,1,0,0);
+                break;
+            case 1: 
+                name = "+1 Ring";
+                local_stats = coreStats(2,2,2,1,1);
+            break;
+            case 2: 
+                name = "+2 Ring";
+                local_stats = coreStats(3,3,3,2,2);
+            break;
+        }
+        return itemManager::createArmour(name, local_stats, ARMOURSLOT::RING2);
+    } else if (drop_seed < 48) {
+        string name;
+        coreStats local_stats;
+        int magicalPower = Random::NTK(0, 2);
+        switch(magicalPower) {
+            case 0: 
+                name = "Neck Guard";
+                local_stats = coreStats(0,0,0,1,1);
+                break;
+            case 1: 
+                name = "+1 Neck Guard";
+                local_stats = coreStats(1,1,1,2,2);
+            break;
+            case 2: 
+                name = "+2 Neck Guard";
+                local_stats = coreStats(2,2,2,3,3);
+            break;
+        }
+        return itemManager::createArmour(name, local_stats, ARMOURSLOT::NECK);
+    } else if (drop_seed < 54) {
+        return itemManager::createWeapon("Sword", coreStats(0, 0, 0, 0, 0), WEAPONSLOT::MELEE, 2, 3);
+    } else if (drop_seed < 60) {
+        return itemManager::createWeapon("Bow", coreStats(0, 0, 0, 0, 0), WEAPONSLOT::RANGED, 2, 3);
+    } else if (drop_seed < 91) {
+        string name;
+        coreStats local_stats;
+        int magicalPower = Random::NTK(0, 2);
+        switch(magicalPower) {
+            case 0: name = "Chestplate";
+                local_stats = coreStats(0,0,0,1,0);
+                break;
+            case 1: 
+                name = "+1 Chestplate";
+                local_stats = coreStats(1,1,1,2,1);
+            break;
+            case 2: 
+                name = "+2 Chestplate";
+                local_stats = coreStats(2,2,2,3,2);
+            break;
+        }
+        return itemManager::createPotion("Potion of Healing", Random::NTK(2, 5), Random::NTK(1, 2));
+    } else if (drop_seed < 101) {
+        string name;
+        coreStats local_stats;
+        int magicalPower = Random::NTK(0, 2);
+        switch(magicalPower) {
+            case 0: name = "Chestplate";
+                local_stats = coreStats(0,0,0,1,0);
+                break;
+            case 1: 
+                name = "+1 Chestplate";
+                local_stats = coreStats(1,1,1,2,1);
+            break;
+            case 2: 
+                name = "+2 Chestplate";
+                local_stats = coreStats(2,2,2,3,2);
+            break;
+        }
+        return nullptr; // aww, no loot :c
+    } 
+}
+
 void newEnemy(Fightable* in_out, const Player* base_calc) {
     if(!base_calc)
         return;
@@ -406,12 +599,13 @@ void enterFight(Player& player1) {
         return;
     }
 
+    // SUDDENLY. screen clears up. SURPRISE FIGHT MUAHAHAHAHAHA
+    // lol jk, I just want it to be cleaner is all ¯\_(ツ)_/¯
     system("cls");
 
     while(player1.isAlive() && CurrentEnemy->isAlive()) {
-        cout << "An enemy stands before you, ready to do battle.\n";
-        cout << "Player health: " << player1.us.getCurrentHP() << "/" << player1.us.getMaxHP() << "\n";
-        cout << "Enemy health: " << CurrentEnemy->enemy.HP.getCurrent() << "/" << CurrentEnemy->enemy.HP.getMax() << "\n";
+        cout << "An enemy appears before you, ready to do battle!\n";
+        cout << "Player health: " << player1.us.getCurrentHP() << "/" << player1.us.getMaxHP() << "                 Enemy health: " << CurrentEnemy->enemy.HP.getCurrent() << "/" << CurrentEnemy->enemy.HP.getMax() << "\n\n\n";
         retry:
         cout << "What will you do?\n[ Attack ]\n";
         string playerAction = playerChoice();
@@ -430,13 +624,24 @@ void enterFight(Player& player1) {
     }
 
     if(player1.isAlive()) {
-        cout << "You win!\n";
+        cout << "You win!\n"; // victory!
         cout << "You gain " << CurrentEnemy->xpworth << " exp!\n";
-        player1.us.gainEXP(CurrentEnemy->xpworth);
-        victoryCount++;
-        newEnemy(CurrentEnemy, &player1);
+        Item* item_drop = dropLoot(); // loot :D
+
+        if(item_drop) {
+            itemManager::moveToBackpack(item_drop, &player1.us);
+            cout << "You find loot! You get: " << item_drop->getData()->Name << "\n";
+        }
+
+        player1.us.gainEXP(CurrentEnemy->xpworth); //give player exp
+        victoryCount++; // # of enemies defeated +1
+        newEnemy(CurrentEnemy, &player1); // create new enemy
+        std::cout << "\n--------------- PRESS ANY KEY TO CONTINUE ---------------\n";
+        _getch();
     } else {
-        cout << "You were defeated!\n";
+        cout << "You were defeated!\n"; // shit happens ¯\_(ツ)_/¯
+        std::cout << "\n---  GAME OVER  ---\n";
+        _getch();
     }
 }
 
