@@ -97,13 +97,13 @@ itemManager::equip(itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2
     }
 #pragma endregion
 
-// get a location to start with
-string currentLocation = setLocation();
-bool wander = false;
 
 #pragma region WANDERING
+// get a location to start with
+string currentLocation = setLocation();
 #define RANDOMENCOUNTER int randomEvent;\
     int encounterNum = 0;\
+    bool wander = false;\
     repeat:\
     std::cout << "You wander around but come across nothing of interest. \n Keep wandering? [yes / no]\n";\
     string wanderOpt = playerChoice();\
@@ -158,7 +158,7 @@ bool wander = false;
                     string playerAction = playerChoice();\
                     if(playerAction == "yes"){\
                         std::cout << "You take the Cool Stick with you.\n";\
-                        itemManager::moveToBackpack(itemManager::createWeapon("Cool Stick", coreStats(), WEAPONSLOT::MELEE, 1, 2), &MainCharacter->us);\
+                        itemManager::equip(itemManager::createWeapon("Cool Stick", coreStats(), WEAPONSLOT::MELEE, 1, 2), &MainCharacter->us);\
                         std::cout << "Obtained Cool Stick!\n";\
                     } else if(playerAction == "no"){\
                         std::cout << "You decide to leave the Cool Stick where it is.\n";\
@@ -181,7 +181,7 @@ bool wander = false;
                     break;\
             }\
         } else {\
-            if(encounterNum >= 4){\
+            if(encounterNum >= 3){\
                 rnum == pnum;\
                 goto forceEncounter;\
             } else {\
@@ -346,10 +346,10 @@ std::cout << "Inventory: ";\
 for(auto it : inv) { std::cout << *it << ", "; }
 #pragma endregion
 
-#define Coords Random::NTK(1, 3);
 
 #pragma region BATTLE
-// BATTLE STUFF
+#define Coords Random::NTK(1, 3);
+
 struct Player {
     Player(playerCharacterDelegate* charclass) : us(charclass) {}
     Player() = delete;
@@ -406,9 +406,10 @@ void enterFight(Player& player1) {
         return;
     }
 
+    system("cls");
+
     while(player1.isAlive() && CurrentEnemy->isAlive()) {
-        system("cls");
-        cout << "An enemy stands before you, ready to do battle.";
+        cout << "An enemy stands before you, ready to do battle.\n";
         cout << "Player health: " << player1.us.getCurrentHP() << "/" << player1.us.getMaxHP() << "\n";
         cout << "Enemy health: " << CurrentEnemy->enemy.HP.getCurrent() << "/" << CurrentEnemy->enemy.HP.getMax() << "\n";
         retry:
