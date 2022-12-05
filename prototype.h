@@ -13,6 +13,8 @@
 #include "itemManager.h"
 #include "enemy.h"
 
+bool gameOver = false;
+
 #pragma region CHARACTERCREATION
 // Create character
 #define CREATECHARACTER MainCharacter = new Player(new Cat());
@@ -629,14 +631,15 @@ void openInventory() {
             int optNum = numChoice();
             if(optNum == 0) {
                 done = true;
-            }
-            if(optNum) {
-                if(itemManager::isPotion(listItems[optNum-1]))
-                    itemManager::use(listItems[optNum-1], &(MainCharacter->us));
+                break;
+            } else if(optNum) {
+                int UseNum = (optNum - 1);
+                if(itemManager::isPotion(listItems[UseNum]))
+                    itemManager::use(listItems[UseNum], &(MainCharacter->us));
                 else
-                    itemManager::equip(listItems[optNum-1], &(MainCharacter->us));
+                    itemManager::equip(listItems[UseNum], &(MainCharacter->us));
             } else {
-                cout << "Invalid input..";
+                cout << "Invalid input..\n";
                 goto inv;
             }
         }
@@ -696,6 +699,7 @@ void enterFight(Player& player1) {
         _getch();
     } else {
         cout << "You were defeated!\n"; // shit happens ¯\_(ツ)_/¯
+        gameOver = true;
         std::cout << "\n---  GAME OVER  ---\n";
         _getch();
     }

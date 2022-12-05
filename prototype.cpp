@@ -4,6 +4,8 @@ int main() {
     
     std::cout << "\n--------------------- PROTOTYPE START ---------------------\n";
 
+    while(!gameOver){
+
     char name[50];
     std::cout << "Hello. You are a cat. \n";
     std::cout << "What is your name? \n";
@@ -30,6 +32,7 @@ int main() {
     
     EXPLORATION
     while(wander) { playerWander(*MainCharacter); }
+    }
 
     cout << "Total # of enemies defeated: " << victoryCount << "\n";
     std::cout << "\n------------------------------------------------------------------\n";
