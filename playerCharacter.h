@@ -138,6 +138,11 @@ private:
         );
         for_each(to_remove, Backpack.end(), [](Item* i) { delete i; });
         Backpack.erase(to_remove, Backpack.end());
+
+        const auto ref_remove = stable_partition(Backpack.begin(), Backpack.end(), 
+        [](const Item* i) -> bool { return !i->checkIfMarkedAsEquipped(); }
+        );
+        Backpack.erase(ref_remove, Backpack.end());
     }
     friend class itemManager;
 public:
@@ -177,6 +182,7 @@ public:
     exptype getExptoLvlup() const { return pcClass->getExptoLvlup(); }
 
     // hp & mp
+    const bool isMaxHealth() const { return pcClass->HP->isFull(); }
     welltype getCurrentHP() const { return pcClass->HP->getCurrent(); }
     welltype getMaxHP() const { return pcClass->HP->getMax(); }
 

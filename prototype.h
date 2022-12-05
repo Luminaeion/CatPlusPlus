@@ -6,6 +6,7 @@
 #include <string>
 #include <fstream>
 #include <bits/stdc++.h>
+#include <stdio.h>
 
 #include "playerFunctions.h"
 #include "playerCharacter.h"
@@ -148,6 +149,7 @@ string currentLocation = setLocation();
                 case 6:\
                     {\
                     std::cout << "An enemy appears!\n";\
+                    _getch();\
                     enterFight(*MainCharacter);\
                     }\
                     break;\
@@ -198,7 +200,8 @@ string currentLocation = setLocation();
     \
     exploration:\
     std::cout << "What would you like to do next?\n";\
-    std::cout << "[ look around / wander / check stats ]\n";\
+    std::cout << "[ look around / wander / check stats / open inventory ]\n";\
+    awaitInput:\
     string playerInput = longInput();\
     \
     if(playerInput == "wander"){\
@@ -214,6 +217,11 @@ string currentLocation = setLocation();
         CHARACTERINFO\
         std::cout << "Finished with your brief moment of reflection, you get up, ready to continue onward.\n";\
         goto exploration;\
+    } else if(playerInput == "open inventory") {\
+        openInventory();\
+        goto exploration;\
+    } else if(playerInput == "") {\
+        goto awaitInput;\
     } else {\
         std::cout << "Input not recognised. Please try again.\n";\
         goto exploration;\
@@ -237,7 +245,7 @@ string currentLocation = setLocation();
     if(rndNum == rndNum2) { encounteredSomething = true; }
 #pragma endregion
 
-
+// TODO Need to rename test items :P
 #pragma region RANDOMFOUNDTHING
 int generateRandomThing() {
     int thingType = rand()%3;
@@ -245,7 +253,7 @@ int generateRandomThing() {
     int thingArr[4][4] = {{0,1,2,3}, {4,5,6,7}, {8,9,10,11}, {12,13,14,15}};
     int genRes = thingArr[thingType][thingNum];
     // output test
-    cout << "This was generated: " << thingArr[thingType][thingNum] << "(from pos" << thingType << "," << thingNum << ")\n";
+    //cout << "This was generated: " << thingArr[thingType][thingNum] << "(from pos" << thingType << "," << thingNum << ")\n";
     // fetch generated item
     Item* generatedItem;
     switch(genRes) {
@@ -331,7 +339,7 @@ int generateRandomThing() {
 #define DISCOVERY \
 CHECKIFANYTHINGFOUND \
 if(encounteredSomething){\
-    cout << "HELLO YOU APPARENTLY FOUND SOME STUFF, NICE\n";\
+    cout << "You find something!\n";\
     generateRandomThing();\
 } else {\
     cout << "You don't find anything of interest in the area.\n";\
@@ -370,6 +378,7 @@ struct Fightable {
     int xpworth;
     Fightable() = delete;
 };
+
 
 Player* MainCharacter = nullptr;
 Fightable* CurrentEnemy = nullptr;
@@ -569,6 +578,7 @@ Item* dropLoot() {
     } 
 }
 
+
 void newEnemy(Fightable* in_out, const Player* base_calc) {
     if(!base_calc)
         return;
@@ -596,15 +606,41 @@ void newEnemy(Fightable* in_out, const Player* base_calc) {
 
 void openInventory() {
     system("cls");
-
     cout << "You look into your backpack. \n";
     cout << "------------------------------------------------------------------\n";
-    auto listItems = MainCharacter->us.getBackpackList();
-    for( const auto& item : listItems) {
-        cout << "> " << item->getData()->Name << "\n";
+    bool done = false;
+    inv:
+    while(!done) {
+        auto listItems = MainCharacter->us.getBackpackList();
+        int numPossessedItems = 0;
+        int itemNum = 0;
+        for( const auto& item : listItems) {
+            ++itemNum;
+            cout << "> (" << itemNum << ")" << item->getData()->Name << "\n";
+            numPossessedItems++;
+        }
+        if(listItems.empty()) {
+            cout << "You have no items.. :/\n Press any key to exit inventory.\n";
+            done = true;
+            _getch();
+        } else if(!listItems.empty()) {
+            
+            cout << "Enter number of item/armour you'd like to use.\n (enter 0 to exit)\n";
+            int optNum = numChoice();
+            if(optNum == 0) {
+                done = true;
+            }
+            if(optNum) {
+                if(itemManager::isPotion(listItems[optNum-1]))
+                    itemManager::use(listItems[optNum-1], &(MainCharacter->us));
+                else
+                    itemManager::equip(listItems[optNum-1], &(MainCharacter->us));
+            } else {
+                cout << "Invalid input..";
+                goto inv;
+            }
+        }
     }
-    cout << "\n Press any button to continue \n";
-    char c = getchar();
 }
 
 // returns true on win
@@ -622,14 +658,17 @@ void enterFight(Player& player1) {
         cout << "Player health: " << player1.us.getCurrentHP() << "/" << player1.us.getMaxHP() << "                 Enemy health: " << CurrentEnemy->enemy.HP.getCurrent() << "/" << CurrentEnemy->enemy.HP.getMax() << "\n";
         retry:
         cout << "What will you do?\n[ Attack / Inventory ]\n";
+        awaitInput:
         string playerAction = playerChoice();
         if(playerAction == "attack") {
             cout << "You attack the enemy.\n";
             CurrentEnemy->enemy.HP.reduceCurrent(player1.us.meleeAtk());
         } else if(playerAction == "inventory") {
             openInventory();
+        } else if(playerAction == "") {
+            goto awaitInput;
         } else {
-            cout << "Input not recognised. Try again.";
+            cout << "Input not recognised. Try again.\n";
             goto retry;
         }
 
@@ -637,6 +676,7 @@ void enterFight(Player& player1) {
             cout << "The enemy attacks!\n";
             player1.us.takeDmg(CurrentEnemy->enemy.Attack());
         }
+        std::cout << "\n------------------------------------------------------------------\n\n";
     }
 
     if(player1.isAlive()) {

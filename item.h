@@ -90,8 +90,10 @@ public:
         }
     }
     bool checkIfMarkedForDeletion() const { return marked_for_deletion; }
+    bool checkIfMarkedAsEquipped() const { return marked_as_equipped; }
 private:
     bool marked_for_deletion = false;
+    bool marked_as_equipped = false; // aka backpack ref needs to be removed
     Item(ItemDelegate* item) : _data(item) {}
     friend class itemManager;
     friend class PlayerCharacter;

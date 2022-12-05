@@ -49,3 +49,16 @@ string setLocation() {
         string locations[] = { "pond", "forest", "backyard", "location4", "location5" };
         return locations[rndloc];
     }
+
+
+int getNumberFromString(string str) {
+    string numberOnly = str.substr(0, str.find_first_of("0123456789"));
+    int NUM = stoi(numberOnly);
+    return NUM;
+}
+
+int numChoice() {
+    int numInput;
+    cin >> numInput;
+    return numInput;
+}

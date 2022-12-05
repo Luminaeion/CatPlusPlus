@@ -16,7 +16,7 @@ int main() {
 
     position[CurrentEnemy->xpos][CurrentEnemy->ypos] = 'E';
 
-    DEFAULTGEAR
+    //DEFAULTGEAR
 
     CHARACTERINFO
     
@@ -33,8 +33,6 @@ int main() {
 
     cout << "Total # of enemies defeated: " << victoryCount << "\n";
     std::cout << "\n------------------------------------------------------------------\n";
-    _getch();
-
     std::cout << "\n--------------------- PROTOTYPE END ---------------------";
     _getch();
 
