@@ -347,7 +347,7 @@ for(auto it : inv) { std::cout << *it << ", "; }
 #pragma endregion
 
 
-#pragma region BATTLE
+#pragma region WANDERING&BATTLES
 #define Coords Random::NTK(1, 3);
 
 struct Player {
@@ -593,6 +593,20 @@ void newEnemy(Fightable* in_out, const Player* base_calc) {
     CurrentEnemy = in_out;
 }
 
+
+void openInventory() {
+    system("cls");
+
+    cout << "You look into your backpack. \n";
+    cout << "------------------------------------------------------------------\n";
+    auto listItems = MainCharacter->us.getBackpackList();
+    for( const auto& item : listItems) {
+        cout << "> " << item->getData()->Name << "\n";
+    }
+    cout << "\n Press any button to continue \n";
+    char c = getchar();
+}
+
 // returns true on win
 void enterFight(Player& player1) {
     if(!CurrentEnemy) {
@@ -602,23 +616,25 @@ void enterFight(Player& player1) {
     // SUDDENLY. screen clears up. SURPRISE FIGHT MUAHAHAHAHAHA
     // lol jk, I just want it to be cleaner is all ¯\_(ツ)_/¯
     system("cls");
-
+    cout << "An enemy appears before you, ready to do battle!\n";
     while(player1.isAlive() && CurrentEnemy->isAlive()) {
-        cout << "An enemy appears before you, ready to do battle!\n";
-        cout << "Player health: " << player1.us.getCurrentHP() << "/" << player1.us.getMaxHP() << "                 Enemy health: " << CurrentEnemy->enemy.HP.getCurrent() << "/" << CurrentEnemy->enemy.HP.getMax() << "\n\n\n";
+        cout << "The enemy awaits your move.\n";
+        cout << "Player health: " << player1.us.getCurrentHP() << "/" << player1.us.getMaxHP() << "                 Enemy health: " << CurrentEnemy->enemy.HP.getCurrent() << "/" << CurrentEnemy->enemy.HP.getMax() << "\n";
         retry:
-        cout << "What will you do?\n[ Attack ]\n";
+        cout << "What will you do?\n[ Attack / Inventory ]\n";
         string playerAction = playerChoice();
         if(playerAction == "attack") {
             cout << "You attack the enemy.\n";
             CurrentEnemy->enemy.HP.reduceCurrent(player1.us.meleeAtk());
+        } else if(playerAction == "inventory") {
+            openInventory();
         } else {
             cout << "Input not recognised. Try again.";
             goto retry;
         }
 
         if(CurrentEnemy->isAlive()){
-            cout << "The enemy attacks!";
+            cout << "The enemy attacks!\n";
             player1.us.takeDmg(CurrentEnemy->enemy.Attack());
         }
     }
