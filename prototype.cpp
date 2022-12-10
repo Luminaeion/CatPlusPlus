@@ -6,24 +6,24 @@ int main() {
 
     while(!gameOver){
 
-    INTRO
+        INTRO
 
-    CREATECHARACTER
+        CREATECHARACTER
 
-    newEnemy(CurrentEnemy, MainCharacter);
+        newEnemy(CurrentEnemy, MainCharacter);
 
-    position[CurrentEnemy->xpos][CurrentEnemy->ypos] = 'E';
-    
-    TUTORIALCHOICE
+        position[CurrentEnemy->xpos][CurrentEnemy->ypos] = 'E';
+        
+        TUTORIALCHOICE
 
-    std::cout << "\n------------------------------------------------------------------\n";
-    std::cout << "Well done! You got the hang of it quickly. You'll run into more choices like this as you move on.\n";
-    std::cout << "Don't worry, though. You'll always be able to view your options when you're presented with a choice.\n"; 
-    std::cout << "Have fun! :)\n";
-    std::cout << "------------------------------------------------------------------\n";
-    
-    EXPLORATION
-    while(wander) { playerWander(*MainCharacter); }
+        std::cout << "\n------------------------------------------------------------------\n";
+        std::cout << "Well done! You got the hang of it quickly. You'll run into more choices like this as you move on.\n";
+        std::cout << "Don't worry, though. You'll always be able to view your options when you're presented with a choice.\n"; 
+        std::cout << "Have fun! :)\n";
+        std::cout << "------------------------------------------------------------------\n\n";
+        
+        EXPLORATION
+        while(wander) { playerWander(*MainCharacter); }
     }
 
     cout << "Total # of enemies defeated: " << victoryCount << "\n";

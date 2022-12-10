@@ -54,6 +54,7 @@ static bool equip(Item* item_to_equip, playerCharacter* p_char) {
             p_char->equippedArmour[slot_num] = item_to_equip; // equip new
             item_to_equip->marked_as_equipped = true;
         }
+        cout << item_to_equip->_data->Name << " equipped.\n";
         p_char->cleanup_backpack(); // gets rid of pointers for equipped stuff
         return true;
     }
@@ -71,13 +72,13 @@ static bool equip(Item* item_to_equip, playerCharacter* p_char) {
             p_char->equippedWeapons[slot_num] = item_to_equip;// equip new
             item_to_equip->marked_as_equipped = true;
         }
+        cout << p_char->equippedWeapons[slot_num]->_data->Name << " equipped.\n";
         p_char->cleanup_backpack(); // gets rid of pointers for equipped stuff
         return true;
     }
     return false;
 }
 
-// update when there is an inventory
 static bool use(Item* item_to_use, playerCharacter* p_char) {
     if(!item_to_use->getData() || !item_to_use || !p_char)
         return false;
@@ -94,8 +95,8 @@ static bool use(Item* item_to_use, playerCharacter* p_char) {
             p_char->applyBuff(*potion->buff);
         } else {
             // don't use potion if full HP
-            if(p_char->isMaxHealth()) { return false; } else { p_char->heal(potion->healAmount); }}
-        // increse hp by amount potion heals (could be 0, that's fine)
+            if(p_char->isMaxHealth()) { cout << "Your health is full. There is no need to use this item now.\n"; return false; } else { p_char->heal(potion->healAmount); cout << "You healed " << potion->healAmount << " hp!\n"; }}
+        // increase hp by amount potion heals (could be 0, that's fine)
         
         // potion used, reduce quantity
         potion->Quantity--;
