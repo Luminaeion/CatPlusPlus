@@ -220,7 +220,7 @@ string currentLocation = setLocation();
     if(rndNum == rndNum2) { encounteredSomething = true; }
 #pragma endregion
 
-// TODO Need to rename test items :P
+
 #pragma region RANDOMFOUNDTHING
 int generateRandomThing() {
     int thingType = rand()%3;
@@ -233,75 +233,64 @@ int generateRandomThing() {
     switch(genRes) {
     case 0: // items 0-3 
         {
-        Item* HealPotion = itemManager::createPotion("TESTITEM_POTION1", 3u, 3u);
-        generatedItem = HealPotion;
+        Item* CatTreat = itemManager::createPotion("Cat treat", 1u, 1u);
+        generatedItem = CatTreat;
         break;
         }
     case 1:
         {
-        Item* HealPotion1 = itemManager::createPotion("TESTITEM_POTION2", 3u, 3u);
-        generatedItem = HealPotion1;
+        Item* FishBiscuit = itemManager::createPotion("Fish biscuit", 2u, 1u);
+        generatedItem = FishBiscuit;
         break;
         }
     case 2:
         {
-        Item* HealPotion2 = itemManager::createPotion("TESTITEM_POTION3", 3u, 3u);
-        generatedItem = HealPotion2;
+        Item* Catnip = itemManager::createPotion("Catnip", 3u, 1u);
+        generatedItem = Catnip;
         break;
         }
     case 3:
         {
-        Item* HealPotion3 = itemManager::createPotion("TESTITEM_POTION4", 3u, 3u);
-        generatedItem = HealPotion3;
+        Item* CanOTuna = itemManager::createPotion("Can of Tuna", 5u, 1u);
+        generatedItem = CanOTuna;
         break;
         }
     case 4: // weapons 8-11
         {
-        Item* MurderMitts = itemManager::createWeapon("TESTITEM_WEAPON1", coreStats(), WEAPONSLOT::MELEE, 1, 4);
-        generatedItem = MurderMitts;
+        Item* SharpClaws = itemManager::createWeapon("Sharp Claws", coreStats(), WEAPONSLOT::MELEE, 1, 3);
+        generatedItem = SharpClaws;
         break;
         }
     case 5:
         {
-        Item* MurderMitts1 = itemManager::createWeapon("TESTITEM_WEAPON2", coreStats(), WEAPONSLOT::MELEE, 1, 4);
-        generatedItem = MurderMitts1;
+        Item* SharpTeeth = itemManager::createWeapon("Sharp Teeth", coreStats(), WEAPONSLOT::MELEE, 1, 4);
+        generatedItem = SharpTeeth;
         break;
         }
     case 6:
         {
-        Item* MurderMitts2 = itemManager::createWeapon("TESTITEM_WEAPON3", coreStats(), WEAPONSLOT::MELEE, 1, 4);
-        generatedItem = MurderMitts2;
+        Item* ButterKnife = itemManager::createWeapon("Butter knife", coreStats(), WEAPONSLOT::MELEE, 2, 4);
+        generatedItem = ButterKnife;
         break;
         }
     case 7:
         {
-        Item* MurderMitts3 = itemManager::createWeapon("TESTITEM_WEAPON4", coreStats(), WEAPONSLOT::MELEE, 1, 4);
-        generatedItem = MurderMitts3;
+        Item* TitaniumSpoon = itemManager::createWeapon("Titanium Spoon", coreStats(), WEAPONSLOT::MELEE, 2, 3);
+        generatedItem = TitaniumSpoon;
         break;
         }
     case 8: // armour 12-15
-        {
-        Item* WornCollar = itemManager::createArmour("TESTITEM_ARMOUR1", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK);
-        generatedItem = WornCollar;
-        break;
-        }
     case 9:
         {
-        Item* WornCollar2 = itemManager::createArmour("TESTITEM_ARMOUR2", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK);
-        generatedItem = WornCollar2;
+        Item* SpikyCollar = itemManager::createArmour("Spiky Collar", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK);
+        generatedItem = SpikyCollar;
         break;
         }
     case 10:
-        {
-        Item* WornCollar3 = itemManager::createArmour("TESTITEM_ARMOUR3", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK);
-        generatedItem = WornCollar3;
-        break;
-        }
     case 11:
         {
-        Item* WornCollar4 = itemManager::createArmour("TESTITEM_ARMOUR4", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK);
-        generatedItem = WornCollar4;
-        break;
+        Item* LeatherBoots = itemManager::createArmour("Leather Boots", coreStats(0, 0, 1, 3, 2), ARMOURSLOT::FEET);
+        generatedItem = LeatherBoots;
         }
     }
     std::cout << "Discovered " << *generatedItem << ".\n";
