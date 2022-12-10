@@ -103,14 +103,14 @@ public:
         PCCONSTRUCT 
 
         // character has this ability by default
-        Abilities.emplace_back("Purr", 2u, 1u, abilityTarget::SELF, 7u, abilityScaler::INT);
+        Abilities.emplace_back("Purr", 2u, nullptr, 1u, 7u, abilityTarget::SELF, abilityScaler::INT);
     }
 private:
  void lvlUp() override{
     LEVELUP 
-    if(CurrentLVL == 2){
+    if(getLvl() == 2){
         // gain new ability :D
-        Abilities.emplace_back("Swipe", 2u, 2u, abilityTarget::ENEMY, 5u, abilityScaler::STR);
+        Abilities.emplace_back("Swipe", 2u, nullptr, 5u, 2u, abilityTarget::ENEMY, abilityScaler::STR);
         std::cout << "- GAINED NEW ABILITY SWIPE -" << endl;
 
         // Stat boosts for lvlups can be done like this:

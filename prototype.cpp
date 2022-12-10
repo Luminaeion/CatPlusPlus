@@ -6,11 +6,7 @@ int main() {
 
     while(!gameOver){
 
-    char name[50];
-    std::cout << "Hello. You are a cat. \n";
-    std::cout << "What is your name? \n";
-    std::cin.getline(name, 50);
-    std::cout << "Welcome, " << name << ". \n";
+    INTRO
 
     CREATECHARACTER
 
@@ -20,7 +16,7 @@ int main() {
 
     //DEFAULTGEAR
 
-    CHARACTERINFO
+    //CHARACTERINFO
     
     TUTORIALCHOICE
 

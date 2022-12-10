@@ -15,6 +15,12 @@
 
 bool gameOver = false;
 
+#define INTRO char name[50];\
+    std::cout << "Hello. You are a cat. \n";\
+    std::cout << "What is your name? \n";\
+    std::cin.getline(name, 50);\
+    std::cout << "Welcome, " << name << ". \n";
+
 #pragma region CHARACTERCREATION
 // Create character
 #define CREATECHARACTER MainCharacter = new Player(new Cat());
@@ -114,13 +120,14 @@ string currentLocation = setLocation();
         wander = true;\
         int randomEvent;\
         srand((unsigned)time(0));\
-        int rnum = rng(10);\
-        int pnum = rng(10);\
+        int rnum = rng(4);\
+        int pnum = rng(4);\
         if(rnum == pnum){\
             forceEncounter:\
-            switch(rnum){\
+            int encNum = rng(10);\
+            switch(encNum){\
                 case 1:\
-                case 2:\
+                case 6:\
                     {\
                     std::cout << "You find a Fish Biscuit that looks particularly delicious. \n Pick it up? [ yes / no ]\n";\
                     string playerAction = playerChoice();\
@@ -133,30 +140,30 @@ string currentLocation = setLocation();
                     }\
                     }\
                     break;\
-                case 3:\
-                case 4:\
+                case 2:\
+                case 7:\
                     {\
                     std::cout << "You find a Small Healing Potion. It might be useful. \n Pick it up? [ Yes / No ]\n";\
                     string playerAction = playerChoice();\
                     if(playerAction == "yes"){\
                         std::cout << "You pick the Small Healing Potion up.\n";\
-                        itemManager::moveToBackpack(itemManager::createPotion("Small Healing Potion", 1u, 3u), &MainCharacter->us);\
+                        itemManager::moveToBackpack(itemManager::createPotion("Small Healing Potion", 1u, 1u), &MainCharacter->us);\
                         std::cout << "Obtained Small Healing Potion!\n";\
                     } else if(playerAction == "no"){\
                         std::cout << "You ignore the Small Healing Potion and walk away.\n";\
                     }\
                     }\
                     break;\
-                case 5:\
-                case 6:\
+                case 3:\
+                case 8:\
                     {\
                     std::cout << "An enemy appears!\n";\
                     _getch();\
                     enterFight(*MainCharacter);\
                     }\
                     break;\
-                case 7:\
-                case 8:\
+                case 4:\
+                case 9:\
                     {\
                     std::cout << "You find a Cool Stick. It might be useful. \n Pick it up? [ Yes / No ]\n";\
                     string playerAction = playerChoice();\
@@ -169,7 +176,7 @@ string currentLocation = setLocation();
                     }\
                     }\
                     break;\
-                case 9:\
+                case 5:\
                 case 10:\
                     {\
                     std::cout << "You find a Tophat. \n Do you want to bring it with you? [ yes / no ]\n";\
@@ -216,7 +223,7 @@ string currentLocation = setLocation();
         goto exploration;\
     } else if (playerInput == "check stats") {\
         std::cout << "You sit down and examine yourself.\n";\
-        CHARACTERINFO\
+        DisplayCharacterSheet(name);\
         std::cout << "Finished with your brief moment of reflection, you get up, ready to continue onward.\n";\
         goto exploration;\
     } else if(playerInput == "open inventory") {\
@@ -633,6 +640,7 @@ void openInventory() {
                 done = true;
                 break;
             } else if(optNum) {
+                // NOTE TO SELF! STACKED POTIONS DON'T SHOW HOW MANY ARE STACKED! WHEN USING THEM IT LOOKS LIKE YOU'RE NOT REALLY USING THEM AT ALL UNTIL YOU USE THE LAST ONE
                 int UseNum = (optNum - 1);
                 if(itemManager::isPotion(listItems[UseNum]))
                     itemManager::use(listItems[UseNum], &(MainCharacter->us));
@@ -714,3 +722,74 @@ void playerWander(Player& player1) {
 }
 #pragma endregion
 
+
+void DisplayCharacterSheet(string characterName) {
+    system("cls");
+    cout << "Your character - " << characterName << " the cat\n"
+    << "------------------------------------------------------------------\n"
+    << "Health: " << MainCharacter->us.getCurrentHP() << "/" << MainCharacter->us.getMaxHP() << "\n"
+    << "Str: " << MainCharacter->us.getTotalStrength() << "\n"
+    << "Int: " << MainCharacter->us.getTotalIntellect() << "\n"
+    << "Agi: " << MainCharacter->us.getTotalAgility() << "\n"
+    << "Def: " << MainCharacter->us.getTotalDefence() << "\n"
+    << "Res: " << MainCharacter->us.getTotalResistance() << "\n"
+    << "Equipped gear: \n";
+    // Melee weapon
+    if(MainCharacter->us.getEquippedWeapon((unsigned long long)WEAPONSLOT::MELEE)) {
+        string meleeWeapon = MainCharacter->us.getEquippedWeapon((unsigned long long)WEAPONSLOT::MELEE)->Name;
+        int melMinDmg = MainCharacter->us.getEquippedWeapon((unsigned long long)WEAPONSLOT::RANGED)->minDMG;
+        int melMaxDmg = MainCharacter->us.getEquippedWeapon((unsigned long long)WEAPONSLOT::RANGED)->maxDMG;
+        cout << "Melee: " << meleeWeapon << "( " << melMinDmg << "-" << melMaxDmg <<  " dmg)\n";
+    }
+    // Ranged weapon
+    if(MainCharacter->us.getEquippedWeapon((unsigned long long)WEAPONSLOT::RANGED)) {
+        string rangedWeapon = MainCharacter->us.getEquippedWeapon((unsigned long long)WEAPONSLOT::RANGED)->Name;
+        int rngdMinDmg = MainCharacter->us.getEquippedWeapon((unsigned long long)WEAPONSLOT::RANGED)->minDMG;
+        int rngdMaxDmg = MainCharacter->us.getEquippedWeapon((unsigned long long)WEAPONSLOT::RANGED)->maxDMG;
+        cout << "Ranged: " << rangedWeapon << "( " << rngdMinDmg << "-" << rngdMaxDmg <<  " dmg)\n";
+    }
+    // Head
+    if(MainCharacter->us.getEquippedArmour((unsigned long long)ARMOURSLOT::HEAD)) {
+        string armourHead = MainCharacter->us.getEquippedArmour((unsigned long long)ARMOURSLOT::HEAD)->Name;
+        cout << "Head: " << armourHead << "\n";
+    }
+    // Neck
+    if(MainCharacter->us.getEquippedArmour((unsigned long long)ARMOURSLOT::NECK)) {
+        string armourNeck = MainCharacter->us.getEquippedArmour((unsigned long long)ARMOURSLOT::NECK)->Name;
+        cout << "Neck: " << armourNeck << "\n";
+    }
+    // Chest
+    if(MainCharacter->us.getEquippedArmour((unsigned long long)ARMOURSLOT::CHEST)) {
+        string armourChest = MainCharacter->us.getEquippedArmour((unsigned long long)ARMOURSLOT::CHEST)->Name;
+        cout << "Chest: " << armourChest << "\n";
+    }
+    // Hands
+    if(MainCharacter->us.getEquippedArmour((unsigned long long)ARMOURSLOT::HANDS)) {
+        string armourHands = MainCharacter->us.getEquippedArmour((unsigned long long)ARMOURSLOT::HANDS)->Name;
+        cout << "Front paws: " << armourHands << "\n";
+    }
+    // Ring #1
+    if(MainCharacter->us.getEquippedArmour((unsigned long long)ARMOURSLOT::RING1)) {
+        string armourRingOne = MainCharacter->us.getEquippedArmour((unsigned long long)ARMOURSLOT::RING1)->Name;
+        cout << "Ring 1: " << armourRingOne << "\n";
+    }
+    // Ring #2
+    if(MainCharacter->us.getEquippedArmour((unsigned long long)ARMOURSLOT::RING2)) {
+        string armourRingTwo = MainCharacter->us.getEquippedArmour((unsigned long long)ARMOURSLOT::RING2)->Name;
+        cout << "Ring 2: " << armourRingTwo << "\n";
+    }
+    // Legs
+    if(MainCharacter->us.getEquippedArmour((unsigned long long)ARMOURSLOT::LEGS)) {
+        string armourLegs = MainCharacter->us.getEquippedArmour((unsigned long long)ARMOURSLOT::LEGS)->Name;
+        cout << "Legs: " << armourLegs << "\n";
+    }
+    // Feet
+    if(MainCharacter->us.getEquippedArmour((unsigned long long)ARMOURSLOT::FEET)) {
+        string armourFeet = MainCharacter->us.getEquippedArmour((unsigned long long)ARMOURSLOT::FEET)->Name;
+        cout << "Back paws: " << armourFeet << "\n";
+    }
+
+    cout << "\n------------------------------------------------------------------\n";
+    cout << "Press enter to continue\n";
+    _getch();
+}
