@@ -13,10 +13,6 @@ int main() {
     newEnemy(CurrentEnemy, MainCharacter);
 
     position[CurrentEnemy->xpos][CurrentEnemy->ypos] = 'E';
-
-    //DEFAULTGEAR
-
-    //CHARACTERINFO
     
     TUTORIALCHOICE
 

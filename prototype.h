@@ -29,52 +29,8 @@ bool gameOver = false;
 
 #pragma region DEFAULTGEAR
 // Create and equip standard gear
-#define DEFAULTGEAR itemManager::equip(itemManager::createWeapon("Standard Murder Mittens", coreStats(), WEAPONSLOT::MELEE, 1, 4), &MainCharacter->us);\
+#define DEFAULTGEAR itemManager::equip(itemManager::createWeapon("Standard Murder Mittens", coreStats(), WEAPONSLOT::MELEE, 1, 2), &MainCharacter->us);\
 itemManager::equip(itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2, 1), ARMOURSLOT::NECK), &MainCharacter->us);
-#pragma endregion
-
-
-#pragma region CHARACTERINFO
-#define CHARACTERINFO \
-    std::cout << "\n--------------------- CHARACTER INFORMATION: ---------------------\n";\
-    std::cout\
-    << MainCharacter->us.getClassName()\
-    << " - lvl  " << MainCharacter->us.getLvl() << '\n'\
-    << "- Exp:  " << MainCharacter->us.getCurrentEXP() << "/" << MainCharacter->us.getExptoLvlup() << '\n'\
-    << "- HP:   " << MainCharacter->us.getCurrentHP() << "/" << MainCharacter->us.getMaxHP() << '\n'\
-    << "- MP:   " << MainCharacter->us.getCurrentMP() << "/" << MainCharacter->us.getMaxMP() << '\n'\
-    << "- Strength: " << MainCharacter->us.getTotalStrength() << '\n'\
-    << "- Intellect: " << MainCharacter->us.getTotalIntellect() << '\n'\
-    << "- Agility: " << MainCharacter->us.getTotalAgility() << '\n'\
-    << "- Defence: " << MainCharacter->us.getTotalDefence() << '\n'\
-    << "- Elemental resistance: " << MainCharacter->us.getTotalResistance() << endl;\
-    \
-    auto allBuffs = MainCharacter->us.getBuffList();\
-    std::cout << "- Buffs:\n";\
-    for(auto& buff : allBuffs) { std::cout << "   -" << buff.Name << '\n'; }\
-    \
-    auto allAbilities = MainCharacter->us.getAbilityList();\
-    std::cout << "- Abilities:\n";\
-    for(auto& abil : allAbilities) { std::cout << "   -" << abil.Name << '\n'; }\
-    \
-    std::cout << "- Armour:\n";\
-    for(int i = 0; i < (int)ARMOURSLOT::NUM_SLOTS; i++) {\
-        const Armour* tmp = dynamic_cast<const Armour*>(MainCharacter->us.getEquippedArmour(i)); \
-        \
-        if(tmp) {\
-            std::cout << "   " << tmp->Name << " (+" << tmp->Stats.Def << " def, +" << tmp->Stats.Res << " res)" << '\n';\
-        }\
-    }\
-    std::cout << "- Weapons:\n";\
-    for(int i = 0; i < (int)WEAPONSLOT::NUM_SLOTS; i++) {\
-        const Weapon* tmp = dynamic_cast<const Weapon*>(MainCharacter->us.getEquippedWeapon(i)); \
-        \
-        if(tmp) {\
-            std::cout << "   " << tmp->Name << " (" << tmp->minDMG << "-" << tmp->maxDMG << " dmg)" << '\n';\
-        }\
-    }\
-    INVENTORY\
-    std::cout << "\n------------------------------------------------------------------\n\n";
 #pragma endregion
 
 
@@ -97,6 +53,8 @@ itemManager::equip(itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2
         std::cout << "You paw at the yarn. It rolls over and stops.\n";\
         MainCharacter->us.gainEXP(2u);\
         std::cout << "You gain 2 exp.\n";\
+        cout << "For bravely defeating this menace, you're given a WORN COLLAR and STANDARD MURDER MITTENS!\n";\
+        DEFAULTGEAR\
     } else if(tutorialChoice == "leave")\
     {\
         std::cout << "You decide to walk away. 'The yarn may live another day,' you think to yourself.\n";\
@@ -723,6 +681,7 @@ void playerWander(Player& player1) {
 #pragma endregion
 
 
+#pragma region CHARACTERSHEET
 void DisplayCharacterSheet(string characterName) {
     system("cls");
     cout << "Your character - " << characterName << " the cat\n"
@@ -793,3 +752,4 @@ void DisplayCharacterSheet(string characterName) {
     cout << "Press enter to continue\n";
     _getch();
 }
+#pragma endregion
