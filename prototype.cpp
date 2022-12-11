@@ -13,7 +13,7 @@ int main() {
         TUTORIALCHOICE
 
         std::cout << "- - Press enter to continue - -\n";
-        _getch();
+        getchar();
 
         clearScreen
         
@@ -38,7 +38,7 @@ int main() {
     cout << "Total # of enemies defeated: " << victoryCount << "\n";
     std::cout << "\n------------------------------------------------------------------\n";
     std::cout << "\n--------------------- PROTOTYPE END ---------------------";
-    _getch();
+    getchar();
 
     return 0;
 }

@@ -23,7 +23,7 @@ bool wander = false;
     std::cout << "Hello. You are a cat. \n";\
     std::cout << "What is your name? \n";\
     std::cin.getline(name, 50);\
-    std::cout << "Welcome, " << name << ". \n";
+    std::cout << "Welcome, " << name << ". " << endl;\
 
 
 #pragma region CHARACTERCREATION
@@ -52,12 +52,13 @@ CREATECHARACTER \
 RANDOMSTARTINGITEMS \
 newEnemy(CurrentEnemy, MainCharacter);\
 position[CurrentEnemy->xpos][CurrentEnemy->ypos] = 'E';\
-std::cout << "\n";
+std::cout << "" << endl;
 #pragma endregion
 
 bool yarnDefeated = false;
 bool alreadyLooked = false;
 bool damascus = false;
+bool minibossDefeated = false;
 
 #pragma region TUTORIAL
 #define TUTORIALCHOICE \
@@ -67,8 +68,8 @@ bool damascus = false;
     std::cout << "What will you do?\n";\
     std::cout << "[ look / paw / leave ]\n";\
     std::cout << "(Type one of these options and hit enter.)\n";\
+    tutorialNoInput:\
     string tutorialChoice = playerChoice();\
-    \
     if(tutorialChoice == "look")\
     {\
         std::cout << "You look at the ball of yarn sitting in front of you on the floor. Smells like wool.\n";\
@@ -76,10 +77,10 @@ bool damascus = false;
             std::cout << ". . .\n";\
             std::cout << "There is a can of tuna behind the ball of yarn. How did that get there?\n";\
             itemManager::moveToBackpack(itemManager::createPotion("Can of Tuna", 5u, 1u), &MainCharacter->us);\
-            std::cout << "Obtained a CAN OF TUNA!\n";\
+            std::cout << "Obtained a CAN OF TUNA!" << endl;\
             alreadyLooked = true;\
         } else {\
-            cout << "Nothing else to discover here.\n";\
+            cout << "Nothing else to discover here." << endl;\
         }\
         goto retry;\
     } else if(tutorialChoice == "paw")\
@@ -88,23 +89,26 @@ bool damascus = false;
             std::cout << "You paw at the yarn. It rolls over and stops.\n";\
             MainCharacter->us.gainEXP(2u);\
             std::cout << "You gain 2 exp.\n";\
-            std::cout << "For bravely defeating this menace, you're given a WORN COLLAR and STANDARD MURDER MITTENS!\n";\
+            std::cout << "For bravely defeating this menace, you're given a WORN COLLAR and STANDARD MURDER MITTENS!" << endl;\
             DEFAULTGEAR\
+            yarnDefeated = true;\
         } else {\
             std::cout << "The yarn lies defeated a few centimeters further away.\n"\
-            << "No use pawing at a defeated ball of yarn.";\
+            << "No use pawing at a defeated ball of yarn." << endl;\
         }\
         goto retry;\
     } else if(tutorialChoice == "leave")\
     {\
         if(!yarnDefeated) {\
             std::cout << "You decide to walk away. 'The yarn may live another day,' you think to yourself.\n"\
-            << "An ominous feeling lurks in the back of your mind... \n";\
+            << "An ominous feeling lurks in the back of your mind... " << endl;\
         } else {\
-            std::cout << "You move on, ready for a bigger adventure.";\
+            std::cout << "You move on, ready for a bigger adventure." << endl;\
         }\
+    } else if(tutorialChoice == "") {\
+        goto tutorialNoInput;\
     } else {\
-        std::cout << "Input not recognised. Please try again.\n";\
+        std::cout << "Input not recognised. Please try again." << endl;\
         goto retry;\
     }
 #pragma endregion
@@ -114,11 +118,12 @@ bool damascus = false;
 // get a location to start with
 string currentLocation = setLocation();
 #define RANDOMENCOUNTER int randomEvent;\
-    int encounterNum = 0;\
-    repeat:\
+    int encounterNum = 0; \
+    repeat: \
     clearScreen\
-    std::cout << "You wander around but come across nothing of interest. \n Keep wandering? [ Yes / No ]\n";\
-    noInput:\
+    std::cout << "You wander around but come across nothing of interest. \n"\
+    << "Keep wandering? [ Yes / No ]\n"; \
+    noInput: \
     string wanderOpt = playerChoice();\
     if(wanderOpt == "yes"){\
         wander = true;\
@@ -138,9 +143,11 @@ string currentLocation = setLocation();
                     if(playerAction == "yes"){\
                         std::cout << "You pick it up.\n";\
                         itemManager::moveToBackpack(itemManager::createPotion("Fish Biscuit", 2u, 2u), &MainCharacter->us);\
-                        std::cout << "Obtained Fish Biscuit!\n";\
+                        std::cout << "Obtained Fish Biscuit!" << endl;\
+                        getchar();\
                     } else if(playerAction == "no") {\
-                        std::cout << "You don't like this particular Fish Biscuit. You decide to leave it where it is.\n";\
+                        std::cout << "You don't like this particular Fish Biscuit. You decide to leave it where it is." << endl;\
+                        getchar();\
                     }\
                     }\
                     break;\
@@ -151,38 +158,45 @@ string currentLocation = setLocation();
                     if(playerAction == "yes"){\
                         std::cout << "You pick the Small Healing Potions up.\n";\
                         itemManager::moveToBackpack(itemManager::createPotion("Small Healing Potion", 2u, 2u), &MainCharacter->us);\
-                        std::cout << "Obtained Small Healing Potions (x2)!\n";\
+                        std::cout << "Obtained Small Healing Potions (x2)!" << endl;\
+                        getchar();\
                     } else if(playerAction == "no"){\
-                        std::cout << "You ignore the Small Healing Potions and walk away.\n";\
+                        std::cout << "You ignore the Small Healing Potions and walk away." << endl;\
+                        getchar();\
                     }\
                     }\
                     break;\
                 case 7:\
+                    {\
                     if(!yarnDefeated) {\
                         customEnemy(CurrentEnemy);\
-                        std::cout << "Your nemesis - the *MENACING* BALL OF YARN - returns with a vengeance!\n";\
-                        _getch();\
+                        std::cout << "Your nemesis - the *MENACING* BALL OF YARN - returns with a vengeance!" << endl;\
                         enterFight(*MainCharacter, name);\
-                        std::cout << "You defeated the ball of yarn!\n";\
-                        yarnDefeated = true;\
-                    } else if(yarnDefeated && !damascus) {\
+                        if(MainCharacter->isAlive()) { std::cout << "You defeated the ball of yarn!\n";\
+                        yarnDefeated = true; }\
+                    } else if(yarnDefeated && !damascus && minibossDefeated) {\
                         std::cout << "You arrive in the place where you defeated your nemesis.\n"\
                         << "You find a neat weapon here. The pattern reminds you of yarn...\n";\
                         itemManager::moveToBackpack(itemManager::createWeapon("Nemesis' Damascus Steel Knife", coreStats(), WEAPONSLOT::MELEE, 3, 7, false), &MainCharacter->us);\
-                        std::cout << "Obtained NEMESIS' DAMASCUS STEEL KNIFE!\n";\
+                        std::cout << "Obtained NEMESIS' DAMASCUS STEEL KNIFE!" << endl;\
                         damascus = true;\
+                        std::cin.ignore(100, '\n');\
+                        getchar();\
                     } else {\
-                        std::cout << "An enemy appears!\n";\
-                        _getch();\
+                        std::cout << "An enemy appears!" << endl;\
+                        getchar();\
                         enterFight(*MainCharacter, name);\
+                        getchar();\
+                    }\
                     }\
                     break;\
                 case 3:\
                 case 8:\
                     {\
-                    std::cout << "An enemy appears!\n";\
-                    _getch();\
+                    std::cout << "An enemy appears!" << endl;\
+                    getchar();\
                     enterFight(*MainCharacter, name);\
+                    getchar();\
                     }\
                     break;\
                 case 4:\
@@ -193,9 +207,11 @@ string currentLocation = setLocation();
                     if(playerAction == "yes"){\
                         std::cout << "You take the Cool Stick with you.\n";\
                         itemManager::equip(itemManager::createWeapon("Cool Stick", coreStats(), WEAPONSLOT::MELEE, 1, 2), &MainCharacter->us);\
-                        std::cout << "Obtained Cool Stick!\n";\
+                        std::cout << "Obtained Cool Stick!" << endl;\
+                        getchar();\
                     } else if(playerAction == "no"){\
-                        std::cout << "You decide to leave the Cool Stick where it is.\n";\
+                        std::cout << "You decide to leave the Cool Stick where it is." << endl;\
+                        getchar();\
                     }\
                     }\
                     break;\
@@ -207,9 +223,11 @@ string currentLocation = setLocation();
                     if(playerAction == "yes"){\
                         std::cout << "You plop the Tophat on your head. It makes you feel dapper.\n";\
                         itemManager::equip(itemManager::createArmour("Tophat", coreStats(1, 3, 0, 1, 0), ARMOURSLOT::HEAD), &MainCharacter->us);\
-                        std::cout << "Obtained Tophat!\n";\
+                        std::cout << "Obtained Tophat!" << endl;\
+                        getchar();\
                     } else if(playerAction == "no"){\
-                        std::cout << "You decide to leave the Tophat where it is. You reckon you're dapper enough already.\n";\
+                        std::cout << "You decide to leave the Tophat where it is. You reckon you're dapper enough already." << endl;\
+                        getchar();\
                     }\
                     }\
                     break;\
@@ -234,7 +252,7 @@ string currentLocation = setLocation();
     \
     exploration:\
     std::cout << "What would you like to do next?\n";\
-    std::cout << "[ look around / wander / check stats / open inventory ]\n";\
+    std::cout << "[ look around / wander / check stats / open inventory ]" << endl;\
     awaitInput:\
     string playerInput = longInput();\
     \
@@ -243,13 +261,13 @@ string currentLocation = setLocation();
         string currentLocation = setLocation();\
         goto wander;\
     } else if (playerInput == "look around") {\
-        std::cout << "You look around. You see a " << currentLocation << ".\n";\
+        std::cout << "You look around. You see a " << currentLocation << "." << endl;\
         DISCOVERY\
         goto exploration;\
     } else if (playerInput == "check stats") {\
         std::cout << "You sit down and examine yourself.\n";\
         DisplayCharacterSheet(name);\
-        std::cout << "Finished with your brief moment of reflection, you get up, ready to continue onward.\n";\
+        std::cout << "Finished with your brief moment of reflection, you get up, ready to continue onward." << endl;\
         goto exploration;\
     } else if(playerInput == "open inventory") {\
         openInventory(false); /* bool inCombat */\
@@ -257,7 +275,7 @@ string currentLocation = setLocation();
     } else if(playerInput == "") {\
         goto awaitInput;\
     } else {\
-        std::cout << "Input not recognised. Please try again.\n";\
+        std::cout << "Input not recognised. Please try again." << endl;\
         goto exploration;\
     }\
     \
@@ -268,7 +286,7 @@ string currentLocation = setLocation();
             wander = false;\
             goto exploration;\
         } else {\
-        cout << "Input not recognised, please try again.\n";\
+        std::cout << "Input not recognised, please try again." << endl;\
         goto repeat;\
         }\
     }
@@ -367,7 +385,7 @@ if(encounteredSomething){\
     std::cout << "You find something!\n";\
     generateRandomThing();\
 } else {\
-    std::cout << "You don't find anything of interest in the area.\n";\
+    std::cout << "You don't find anything of interest in the area." << endl;\
 }
 #pragma endregion
 
@@ -636,7 +654,7 @@ void customEnemy(Fightable* in_out) {
 bool actionTaken = false;
 
 void openInventory(bool inCombat) {
-    std::cout << "------------------------------------------------------------------\n";
+    std::cout << "------------------------------------------------------------------" << endl;\
     bool done = false;
     clearScreen
     std::cout << "You look into your backpack. \n";
@@ -662,11 +680,11 @@ void openInventory(bool inCombat) {
             numPossessedItems++;
         }
         if(listItems.empty()) {
-            std::cout << "You have no items.. :/\n Press enter to exit inventory.\n";
+            std::cout << "You have no items.. :/\n Press enter to exit inventory." << endl;\
             done = true;
-            _getch();
+            getchar();
         } else if(!listItems.empty()) {
-            std::cout << "Enter number of item/armour you'd like to use.\n (enter 0 to exit)\n";
+            std::cout << "Enter number of item/armour you'd like to use.\n (enter 0 to exit)" << endl;\
             int optNum = numChoice();
             if(optNum == 0) {
                 done = true;
@@ -682,7 +700,7 @@ void openInventory(bool inCombat) {
                 }
                 if(inCombat) { actionTaken = true; }
             } else {
-                std::cout << "Invalid input..\n";
+                std::cout << "Invalid input.." << endl;\
                 goto inv;
             }
         }
@@ -714,7 +732,7 @@ void enterFight(Player& player1, string characterName) {
         } else if(playerAction == "") {
             goto awaitInput;
         } else {
-            std::cout << "Input not recognised. Try again.\n";
+            std::cout << "Input not recognised. Try again." << endl;\
             goto retry;
         }
 
@@ -740,13 +758,12 @@ void enterFight(Player& player1, string characterName) {
         victoryCount++; // # of enemies defeated +1
         newEnemy(CurrentEnemy, &player1); // create new enemy
         std::cout << "\n--------------- PRESS ENTER TO CONTINUE ---------------" << endl;
-        _getch();
     } else {
         std::cout << "You were defeated!\n"; // shit happens ¯\_(ツ)_/¯
         wander = false;
         gameOver = true;
-        std::cout << "\n---  GAME OVER  ---\n";
-        _getch();
+        std::cout << "\n---  GAME OVER  ---" << endl;\
+        getchar();
     }
 }
 
@@ -779,6 +796,7 @@ void DisplayCharacterSheet(string characterName) {
     //clearScreen
     std::cout << "------------------------------------------------------------------\n"
     << "Your character - " << characterName << " the cat\n"
+    << "Lvl: " << MainCharacter->us.getLvl() << " - Exp: " << MainCharacter->us.getCurrentEXP() << "/" << MainCharacter->us.getExptoLvlup() << "\n"
     << "Health: " << MainCharacter->us.getCurrentHP() << "/" << MainCharacter->us.getMaxHP() << "\n"
     << "Str: " << MainCharacter->us.getTotalStrength() << "\n"
     << "Int: " << MainCharacter->us.getTotalIntellect() << "\n"
@@ -839,7 +857,7 @@ void DisplayCharacterSheet(string characterName) {
     }
 
     std::cout << "\n------------------------------------------------------------------\n";
-    std::cout << "Press enter to continue\n";
-    _getch();
+    std::cout << "Press enter to continue" << endl;\
+    getchar();
 }
 #pragma endregion
