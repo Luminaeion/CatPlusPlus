@@ -374,6 +374,7 @@ int generateRandomThing() {
         }
     }
     std::cout << "Discovered " << *generatedItem << ".\n";
+    itemManager::moveToBackpack(generatedItem, &MainCharacter->us);
 }
 #pragma endregion
 
