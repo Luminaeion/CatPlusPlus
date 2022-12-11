@@ -10,6 +10,9 @@ int main() {
 
         CREATECHARACTER
 
+        // give the mc two random items to start with :)
+        RANDOMSTARTINGITEMS
+
         newEnemy(CurrentEnemy, MainCharacter);
 
         position[CurrentEnemy->xpos][CurrentEnemy->ypos] = 'E';
@@ -20,10 +23,6 @@ int main() {
         _getch();
 
         clearScreen
-
-        // give the mc two random items to start with :)
-        itemManager::moveToBackpack(dropLoot(), &MainCharacter->us);
-        itemManager::moveToBackpack(dropLoot(), &MainCharacter->us);
         
         std::cout << "\n------------------------------------------------------------------\n"
         << "Well done! You got the hang of it quickly. You'll run into more choices like this as you move on.\n"

@@ -39,6 +39,13 @@ itemManager::equip(itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2
 #pragma endregion
 
 
+#pragma region RANDOMSTARTITEMS
+#define RANDOMSTARTINGITEMS \
+itemManager::moveToBackpack(dropLoot(), &MainCharacter->us);\
+itemManager::moveToBackpack(dropLoot(), &MainCharacter->us);
+#pragma endregion
+
+
 #pragma region TUTORIAL
 #define TUTORIALCHOICE \
     std::cout << "Here is a brief introduction to how this game functions.\n";\
