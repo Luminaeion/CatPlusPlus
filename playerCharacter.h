@@ -48,7 +48,7 @@ public:
     unique_ptr<pointWell> HP;
     unique_ptr<pointWell> MP;
 
-    vector<Ability> Abilities;
+    vector<Ability*> Abilities;
     vector<Buff> getBuffList() {
         return Buffs;
     }
@@ -103,14 +103,14 @@ public:
         PCCONSTRUCT 
 
         // character has this ability by default
-        Abilities.emplace_back("Purr", 2u, nullptr, 1u, 7u, abilityTarget::SELF, abilityScaler::INT);
+        Abilities.emplace_back(new Ability("Purr", 5u, nullptr, 1u, 3u, 0u, abilityTarget::SELF, abilityScaler::INT));
     }
 private:
  void lvlUp() override{
     LEVELUP 
     if(getLvl() == 2){
         // gain new ability :D
-        Abilities.emplace_back("Swipe", 2u, nullptr, 5u, 2u, abilityTarget::ENEMY, abilityScaler::STR);
+        Abilities.emplace_back(new Ability("Swipe", 2u, nullptr, 5u, 2u, 0u,abilityTarget::ENEMY, abilityScaler::STR));
         std::cout << "- GAINED NEW ABILITY SWIPE -" << endl;
 
         // Stat boosts for lvlups can be done like this:
@@ -310,7 +310,7 @@ public:
         return pcClass->getTotalResistance() + armourRes + weaponRes;
     }
 
-    const vector<Ability> getAbilityList() const { return pcClass->Abilities; }
+    const vector<Ability*> getAbilityList() const { return pcClass->Abilities; }
     const vector<Buff> getBuffList() const { return pcClass->getBuffList(); }
     const vector<Item*> getBackpackList() const { return Backpack; }
 

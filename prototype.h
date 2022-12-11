@@ -301,8 +301,7 @@ string currentLocation = setLocation();
 #pragma endregion
 
 
-#pragma region RANDOMFOUNDTHING
-int generateRandomThing() {
+Item* generateRandomThing() {
     int thingType = rand()%3;
     int thingNum = rand()%4;
     int thingArr[4][4] = {{0,1,2,3}, {4,5,6,7}, {8,9,10,11}, {12,13,14,15}};
@@ -373,18 +372,19 @@ int generateRandomThing() {
         generatedItem = LeatherBoots;
         }
     }
-    std::cout << "Discovered " << *generatedItem << ".\n";
-    itemManager::moveToBackpack(generatedItem, &MainCharacter->us);
+    return generatedItem;
 }
-#pragma endregion
 
 
 #pragma region DISCOVERY
 #define DISCOVERY \
+clearScreen \
 CHECKIFANYTHINGFOUND \
 if(encounteredSomething){\
     std::cout << "You find something!\n";\
-    generateRandomThing();\
+    Item* generatedItem = generateRandomThing();\
+    itemManager::moveToBackpack(generatedItem, &MainCharacter->us);\
+    std::cout << "Obtained " << *generatedItem << "!" << endl;\
 } else {\
     std::cout << "You don't find anything of interest in the area." << endl;\
 }
@@ -640,6 +640,7 @@ void newEnemy(Fightable* in_out, const Player* base_calc) {
     CurrentEnemy = in_out;
 }
 
+
 void customEnemy(Fightable* in_out) {
     if(in_out) {
         delete in_out;
@@ -652,15 +653,15 @@ void customEnemy(Fightable* in_out) {
 }
 
 
-bool actionTaken = false;
+bool done = false;
+
 
 void openInventory(bool inCombat) {
-    std::cout << "------------------------------------------------------------------" << endl;\
     bool done = false;
     clearScreen
     std::cout << "You look into your backpack. \n";
     inv:
-    while(!done && !actionTaken) {
+    while(!done) {
         auto listItems = MainCharacter->us.getBackpackList();
         int numPossessedItems = 0;
         int itemNum = 0;
@@ -681,14 +682,13 @@ void openInventory(bool inCombat) {
             numPossessedItems++;
         }
         if(listItems.empty()) {
-            std::cout << "You have no items.. :/\n Press enter to exit inventory." << endl;\
-            done = true;
+            std::cout << "You have no items.. :/\n Press enter to exit inventory." << endl;
             getchar();
+            done = true;
         } else if(!listItems.empty()) {
             std::cout << "Enter number of item/armour you'd like to use.\n (enter 0 to exit)" << endl;\
             int optNum = numChoice();
             if(optNum == 0) {
-                done = true;
                 clearScreen
                 break;
             } else if(optNum) {
@@ -699,10 +699,46 @@ void openInventory(bool inCombat) {
                 } else {
                     itemManager::equip(listItems[UseNum], &(MainCharacter->us));
                 }
-                if(inCombat) { actionTaken = true; }
+                if(inCombat) { done = true; }
             } else {
                 std::cout << "Invalid input.." << endl;\
                 goto inv;
+            }
+        }
+    }
+}
+
+void abilityMenu() {
+    clearScreen
+    std::cout << "You recall your abilities. \n";
+    abils:
+    while(!done) {
+        auto currentAbilities = MainCharacter->us.getAbilityList();
+        int numofAbilities = 0;
+        int abilNum = 0;
+        for(auto abil : currentAbilities) {
+            ++abilNum;
+            std::cout << "> (" << abilNum << ")" << abil->getName() << "\n";
+            numofAbilities++;
+        }
+        if(currentAbilities.empty()) {
+            std::cout << "You have no abilities.. :/\nPress enter to exit." << endl;\
+            done = true;
+            getchar();
+        } else if(!currentAbilities.empty()) {
+            std::cout << "Enter number of the ability you'd like to use.\n (enter 0 to exit)" << endl;\
+            int optNum = numChoice();
+            if(optNum == 0) {
+                clearScreen
+                break;
+            } else if(optNum) {
+                clearScreen
+                int UseNum = (optNum - 1);
+                
+                done = true;
+            } else {
+                std::cout << "Invalid input.." << endl;
+                goto abils;
             }
         }
     }
@@ -718,11 +754,12 @@ void enterFight(Player& player1, string characterName) {
     // lol jk, I just want it to be cleaner is all ¯\_(ツ)_/¯
     clearScreen
     std::cout << "An enemy appears before you, ready to do battle!\n";
+    battle:
     while(player1.isAlive() && CurrentEnemy->isAlive()) {
         std::cout << "The enemy awaits your move.\n";
         std::cout << characterName <<"'s health: " << player1.us.getCurrentHP() << "/" << player1.us.getMaxHP() << "                 Enemy health: " << CurrentEnemy->enemy.HP.getCurrent() << "/" << CurrentEnemy->enemy.HP.getMax() << "\n";
         retry:
-        std::cout << "What will you do?\n[ Attack / Inventory ]\n";
+        std::cout << "What will you do?\n[ Attack / Inventory / Abilities ]\n";
         awaitInput:
         string playerAction = playerChoice();
         if(playerAction == "attack") {
@@ -730,6 +767,10 @@ void enterFight(Player& player1, string characterName) {
             CurrentEnemy->enemy.HP.reduceCurrent(player1.us.meleeAtk());
         } else if(playerAction == "inventory") {
             openInventory(true); // bool inCombat
+            if(!done) { goto battle; }
+        } else if(playerAction == "abilities") {
+            abilityMenu();
+            if(!done) { goto battle; }
         } else if(playerAction == "") {
             goto awaitInput;
         } else {
@@ -740,7 +781,7 @@ void enterFight(Player& player1, string characterName) {
         if(CurrentEnemy->isAlive()){
             std::cout << "The enemy attacks!\n";
             player1.us.takeDmg(CurrentEnemy->enemy.Attack());
-            actionTaken = false;
+            done = false;
         }
         std::cout << "\n------------------------------------------------------------------\n\n";
     }

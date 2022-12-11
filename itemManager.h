@@ -80,7 +80,9 @@ static bool equip(Item* item_to_equip, playerCharacter* p_char) {
 }
 
 static bool use(Item* item_to_use, playerCharacter* p_char) {
-    if(!item_to_use->getData() || !item_to_use || !p_char)
+    if(!item_to_use || !p_char)
+        return false;
+    if(!item_to_use->getData())
         return false;
     
     Potion* potion = nullptr;
@@ -110,7 +112,9 @@ static bool use(Item* item_to_use, playerCharacter* p_char) {
 }
 
 static bool moveToBackpack(Item* item_to_move, playerCharacter* p_char) {
-    if(!item_to_move->getData() || !item_to_move || !p_char)
+    if(!item_to_move || !p_char)
+        return false;
+    if(!item_to_move->getData())
         return false;
     p_char->Backpack.push_back(item_to_move);
         return true;
@@ -118,7 +122,9 @@ static bool moveToBackpack(Item* item_to_move, playerCharacter* p_char) {
 };
 
 static bool removeFromBackpack(Item* item_to_remove, playerCharacter* p_char) {
-    if(!item_to_remove->getData() || !item_to_remove || !p_char)
+    if(!item_to_remove || !p_char)
+        return false;
+    if(!item_to_remove->getData())
         return false;
 }
 
