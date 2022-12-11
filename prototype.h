@@ -16,6 +16,8 @@
 bool gameOver = false;
 bool wander = false;
 
+#define clearScreen std::system("cls");
+
 #define INTRO\
     char name[50];\
     std::cout << "Hello. You are a cat. \n";\
@@ -50,6 +52,10 @@ itemManager::equip(itemManager::createArmour("Worn Collar", coreStats(0, 0, 0, 2
     if(tutorialChoice == "look")\
     {\
         std::cout << "You look at the ball of yarn sitting in front of you on the floor. Smells like wool.\n";\
+        std::cout << ". . .\n";\
+        std::cout << "There is a can of tuna behind the ball of yarn. How did that get there?\n";\
+        itemManager::moveToBackpack(itemManager::createPotion("Can of Tuna", 5u, 1u), &MainCharacter->us);\
+        std::cout << "Obtained a CAN OF TUNA!\n";\
         goto retry;\
     } else if(tutorialChoice == "paw")\
     {\
@@ -94,7 +100,7 @@ string currentLocation = setLocation();
                     string playerAction = playerChoice();\
                     if(playerAction == "yes"){\
                         std::cout << "You pick it up.\n";\
-                        itemManager::moveToBackpack(itemManager::createPotion("Fish Biscuit", 1u, 2u), &MainCharacter->us);\
+                        itemManager::moveToBackpack(itemManager::createPotion("Fish Biscuit", 2u, 2u), &MainCharacter->us);\
                         std::cout << "Obtained Fish Biscuit!\n";\
                     } else if(playerAction == "no") {\
                         std::cout << "You don't like this particular Fish Biscuit. You decide to leave it where it is.\n";\
@@ -104,14 +110,14 @@ string currentLocation = setLocation();
                 case 2:\
                 case 7:\
                     {\
-                    std::cout << "You find a Small Healing Potion. It might be useful. \n Pick it up? [ Yes / No ]\n";\
+                    std::cout << "You find a couple of Small Healing Potions. They might be useful. \n Pick them up? [ Yes / No ]\n";\
                     string playerAction = playerChoice();\
                     if(playerAction == "yes"){\
-                        std::cout << "You pick the Small Healing Potion up.\n";\
-                        itemManager::moveToBackpack(itemManager::createPotion("Small Healing Potion", 1u, 1u), &MainCharacter->us);\
-                        std::cout << "Obtained Small Healing Potion!\n";\
+                        std::cout << "You pick the Small Healing Potions up.\n";\
+                        itemManager::moveToBackpack(itemManager::createPotion("Small Healing Potion", 2u, 2u), &MainCharacter->us);\
+                        std::cout << "Obtained Small Healing Potions (x2)!\n";\
                     } else if(playerAction == "no"){\
-                        std::cout << "You ignore the Small Healing Potion and walk away.\n";\
+                        std::cout << "You ignore the Small Healing Potions and walk away.\n";\
                     }\
                     }\
                     break;\
@@ -233,19 +239,19 @@ int generateRandomThing() {
     switch(genRes) {
     case 0: // items 0-3 
         {
-        Item* CatTreat = itemManager::createPotion("Cat treat", 1u, 1u);
+        Item* CatTreat = itemManager::createPotion("Cat treat", 1u, 3u);
         generatedItem = CatTreat;
         break;
         }
     case 1:
         {
-        Item* FishBiscuit = itemManager::createPotion("Fish biscuit", 2u, 1u);
+        Item* FishBiscuit = itemManager::createPotion("Fish biscuit", 2u, 2u);
         generatedItem = FishBiscuit;
         break;
         }
     case 2:
         {
-        Item* Catnip = itemManager::createPotion("Catnip", 3u, 1u);
+        Item* Catnip = itemManager::createPotion("Catnip", 3u, 2u);
         generatedItem = Catnip;
         break;
         }
@@ -573,7 +579,7 @@ bool actionTaken = false;
 void openInventory(bool inCombat) {
     std::cout << "------------------------------------------------------------------\n";
     bool done = false;
-    system("cls");
+    clearScreen
     std::cout << "You look into your backpack. \n";
     inv:
     while(!done && !actionTaken) {
@@ -582,7 +588,18 @@ void openInventory(bool inCombat) {
         int itemNum = 0;
         for( const auto& item : listItems) {
             ++itemNum;
-            std::cout << "> (" << itemNum << ")" << item->getData()->Name << "\n";
+            if(itemManager::isPotion(item)) {
+                Potion* potion = nullptr;
+                itemManager::castItemToPotion(item, potion);
+                if(potion){
+                    stringstream itemQuant;
+                    itemQuant << " (x " << potion->Quantity << ")";
+                    string quant = itemQuant.str();
+                    std::cout << "> (" << itemNum << ")" << item->getData()->Name << quant << "\n";
+                }
+            } else {
+                std::cout << "> (" << itemNum << ")" << item->getData()->Name << "\n";
+            }
             numPossessedItems++;
         }
         if(listItems.empty()) {
@@ -590,14 +607,14 @@ void openInventory(bool inCombat) {
             done = true;
             _getch();
         } else if(!listItems.empty()) {
-            
             std::cout << "Enter number of item/armour you'd like to use.\n (enter 0 to exit)\n";
             int optNum = numChoice();
             if(optNum == 0) {
                 done = true;
+                clearScreen
                 break;
             } else if(optNum) {
-                // NOTE TO SELF! STACKED POTIONS DON'T SHOW HOW MANY ARE STACKED! WHEN USING THEM IT LOOKS LIKE YOU'RE NOT REALLY USING THEM AT ALL UNTIL YOU USE THE LAST ONE
+                clearScreen
                 int UseNum = (optNum - 1);
                 if(itemManager::isPotion(listItems[UseNum])){
                     itemManager::use(listItems[UseNum], &(MainCharacter->us));
@@ -621,7 +638,7 @@ void enterFight(Player& player1) {
 
     // SUDDENLY. screen clears up. SURPRISE FIGHT MUAHAHAHAHAHA
     // lol jk, I just want it to be cleaner is all ¯\_(ツ)_/¯
-    system("cls");
+    clearScreen
     std::cout << "An enemy appears before you, ready to do battle!\n";
     while(player1.isAlive() && CurrentEnemy->isAlive()) {
         std::cout << "The enemy awaits your move.\n";
@@ -700,7 +717,7 @@ string getArmourStats(const Armour* Armour) {
 
 #pragma region CHARACTERSHEET
 void DisplayCharacterSheet(string characterName) {
-    //system("cls");
+    //clearScreen
     std::cout << "------------------------------------------------------------------\n"
     << "Your character - " << characterName << " the cat\n"
     << "Health: " << MainCharacter->us.getCurrentHP() << "/" << MainCharacter->us.getMaxHP() << "\n"
