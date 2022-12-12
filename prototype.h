@@ -652,9 +652,7 @@ void customEnemy(Fightable* in_out) {
     CurrentEnemy = in_out;
 }
 
-
 bool done = false;
-
 
 void openInventory(bool inCombat) {
     bool done = false;
@@ -708,7 +706,7 @@ void openInventory(bool inCombat) {
     }
 }
 
-void abilityMenu() {
+void abilitySelection() {
     clearScreen
     std::cout << "You recall your abilities. \n";
     abils:
@@ -734,7 +732,43 @@ void abilityMenu() {
             } else if(optNum) {
                 clearScreen
                 int UseNum = (optNum - 1);
-                
+                if(currentAbilities[UseNum]->getTarget() == abilityTarget::ENEMY) {
+                    // damage enemy
+                    int totaldmg = 0;
+                    switch(currentAbilities[UseNum]->getScaler()) {
+                        case abilityScaler::STR:
+                            totaldmg += (int)(MainCharacter->us.getTotalStrength() / 2.f);
+                            break;
+                        case abilityScaler::INT:
+                            totaldmg += (int)(MainCharacter->us.getTotalIntellect() / 2.f);
+                            break;
+                        case abilityScaler::AGI:
+                            totaldmg += (int)(MainCharacter->us.getTotalAgility() / 2.f);
+                            break;
+                        default:
+                            break;
+                    }
+                    CurrentEnemy->enemy.HP.reduceCurrent(totaldmg);
+                    std::cout << "You damage the enemy for " << totaldmg << " hp!\n";
+                } else if(currentAbilities[UseNum]->getTarget() == abilityTarget::SELF) {
+                    // heal self (probably :))
+                    int totalheal = 0;
+                    switch(currentAbilities[UseNum]->getScaler()) {
+                        case abilityScaler::STR:
+                            totalheal += (int)(MainCharacter->us.getTotalStrength() / 2.f);
+                            break;
+                        case abilityScaler::INT:
+                            totalheal += (int)(MainCharacter->us.getTotalIntellect() / 2.f);
+                            break;
+                        case abilityScaler::AGI:
+                            totalheal += (int)(MainCharacter->us.getTotalAgility() / 2.f);
+                            break;
+                        default:
+                            break;
+                    }
+                    MainCharacter->us.heal(totalheal);
+                    std::cout << "You heal yourself for " << totalheal << " hp.\n";
+                }
                 done = true;
             } else {
                 std::cout << "Invalid input.." << endl;
@@ -769,7 +803,7 @@ void enterFight(Player& player1, string characterName) {
             openInventory(true); // bool inCombat
             if(!done) { goto battle; }
         } else if(playerAction == "abilities") {
-            abilityMenu();
+            abilitySelection();
             if(!done) { goto battle; }
         } else if(playerAction == "") {
             goto awaitInput;
