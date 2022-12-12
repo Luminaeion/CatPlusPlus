@@ -48,7 +48,7 @@ public:
     unique_ptr<pointWell> HP;
     unique_ptr<pointWell> MP;
 
-    vector<Ability> Abilities;
+    vector<Ability*> Abilities;
     vector<Buff> getBuffList() {
         return Buffs;
     }
@@ -93,7 +93,7 @@ protected:
 class Cat : public playerCharacterDelegate {
 public:
     static const welltype BaseHP = (welltype)14;
-    static const stattype BaseStr = (stattype)2;
+    static const stattype BaseStr = (stattype)1;
     static const stattype BaseInt = (stattype)4;
     static const stattype BaseAgi = (stattype)7;
     static const welltype BaseMP = (welltype)10u;
@@ -103,14 +103,14 @@ public:
         PCCONSTRUCT 
 
         // character has this ability by default
-        Abilities.emplace_back("Purr", 2u, 1u, abilityTarget::SELF, 7u, abilityScaler::INT);
+        Abilities.emplace_back(new Ability("Purr", 5u, nullptr, 1u, 3u, 0u, abilityTarget::SELF, abilityScaler::INT));
     }
 private:
  void lvlUp() override{
     LEVELUP 
-    if(CurrentLVL == 2){
+    if(getLvl() == 2){
         // gain new ability :D
-        Abilities.emplace_back("Swipe", 2u, 2u, abilityTarget::ENEMY, 5u, abilityScaler::STR);
+        Abilities.emplace_back(new Ability("Swipe", 2u, nullptr, 5u, 2u, 0u,abilityTarget::ENEMY, abilityScaler::STR));
         std::cout << "- GAINED NEW ABILITY SWIPE -" << endl;
 
         // Stat boosts for lvlups can be done like this:
@@ -138,6 +138,11 @@ private:
         );
         for_each(to_remove, Backpack.end(), [](Item* i) { delete i; });
         Backpack.erase(to_remove, Backpack.end());
+
+        const auto ref_remove = stable_partition(Backpack.begin(), Backpack.end(), 
+        [](const Item* i) -> bool { return !i->checkIfMarkedAsEquipped(); }
+        );
+        Backpack.erase(ref_remove, Backpack.end());
     }
     friend class itemManager;
 public:
@@ -177,6 +182,7 @@ public:
     exptype getExptoLvlup() const { return pcClass->getExptoLvlup(); }
 
     // hp & mp
+    const bool isMaxHealth() const { return pcClass->HP->isFull(); }
     welltype getCurrentHP() const { return pcClass->HP->getCurrent(); }
     welltype getMaxHP() const { return pcClass->HP->getMax(); }
 
@@ -304,7 +310,7 @@ public:
         return pcClass->getTotalResistance() + armourRes + weaponRes;
     }
 
-    const vector<Ability> getAbilityList() const { return pcClass->Abilities; }
+    const vector<Ability*> getAbilityList() const { return pcClass->Abilities; }
     const vector<Buff> getBuffList() const { return pcClass->getBuffList(); }
     const vector<Item*> getBackpackList() const { return Backpack; }
 
@@ -331,6 +337,8 @@ public:
         // add 1/4 of str as bonus melee dmg
         tmp_dmg_done += dmgtype(getTotalStrength() / 4.f);
 
+        if(tmp_dmg_done < 1) tmp_dmg_done = 1; // make sure player does AT LEAST 1 point of damage always
+
         return tmp_dmg_done;
      }
     const dmgtype rangedAtk() const { 
@@ -345,6 +353,8 @@ public:
 
         // add 1/4 of agi as bonus ranged dmg
         tmp_dmg_done += dmgtype(getTotalAgility() / 4.f);
+
+        if(tmp_dmg_done < 1) tmp_dmg_done = 1; // make sure player does AT LEAST 1 point of damage always
 
         return tmp_dmg_done;
      }
