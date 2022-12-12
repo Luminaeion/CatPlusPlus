@@ -79,7 +79,7 @@ int main()
         if(tmp) {
             std::cout << "   " << tmp->Name << " (" << tmp->minDMG << "-" << tmp->maxDMG << " dmg)" << '\n';
         }
-        }
+    }
 
         if(i < 1) {
         protag.gainEXP(100u);

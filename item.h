@@ -40,7 +40,7 @@ protected:
 private:
 };
 
-enum class ARMOURSLOT { HELMET, CHEST, LEGS, BOOTS, GLOVES, RING1, RING2, NECK, NUM_SLOTS }; // num_slots for making arrays, chill
+enum class ARMOURSLOT { HEAD, CHEST, LEGS, FEET, HANDS, RING1, RING2, NECK, NUM_SLOTS }; // num_slots for making arrays, chill
 // this class can't be inherited
 class Armour final : public EquipmentDelegate {
 public: 
@@ -90,8 +90,10 @@ public:
         }
     }
     bool checkIfMarkedForDeletion() const { return marked_for_deletion; }
+    bool checkIfMarkedAsEquipped() const { return marked_as_equipped; }
 private:
     bool marked_for_deletion = false;
+    bool marked_as_equipped = false; // aka backpack ref needs to be removed
     Item(ItemDelegate* item) : _data(item) {}
     friend class itemManager;
     friend class PlayerCharacter;
@@ -111,5 +113,4 @@ private:
     }
     return os;
   }
-
 };
